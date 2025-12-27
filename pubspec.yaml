@@ -1,0 +1,68 @@
+name: sheqlee
+description: "A new Flutter project."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  url_launcher: ^6.2.5
+  cupertino_icons: ^1.0.8
+  http: ^1.6.0
+  flutter_svg: ^2.2.3
+  custom_refresh_indicator: ^4.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: 2.3.10
+
+
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/image.png"
+  
+
+
+flutter_native_splash:
+  color: "#8967B3"
+  image: assets/images/image.png
+
+  android_12:
+    color: "#8967B3"
+    image: assets/images/image.png
+
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/settings - alt2.svg
+    - assets/images/logo.png
+    - assets/jobs.json
+    - assets/images/icon.png  # Ensure this is listed
+    - assets/images/brand.png # Ensure this is listed
+    - assets/icons/           # This includes everything in the assets root
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/PretendardVariable.ttf
+        - asset: assets/fonts/Pretendard-Bold.ttf
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
+        - asset: assets/fonts/Pretendard-Medium.ttf
+        - asset: assets/fonts/Pretendard-Regular.ttf
+        - asset: assets/fonts/Pretendard-Light.ttf
+        - asset: assets/fonts/Pretendard-Thin.ttf 
+        - asset: assets/fonts/Pretendard-ExtraBold.ttf
+        - asset: assets/fonts/Pretendard-ExtraLight.ttf
+        
+  
