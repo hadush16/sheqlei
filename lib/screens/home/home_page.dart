@@ -20,11 +20,26 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  IndicatorController? _refreshController;
+  @override
+  void initState() {
+    super.initState();
+    // 🔹 Bottom Pagination Listener
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        ref
+            .read(jobsProvider.notifier)
+            .fetchMoreJobs(); // Your bottom fetch logic
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final jobsAsync = ref.watch(jobsProvider);
     final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
+    double _pullDistance = 0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,7 +59,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: CustomRefreshIndicator(
         onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
-        builder: (BuildContext context, Widget child, IndicatorController controller) {
+        //       onStateChanged: (state) {
+        //   if (state.isIdle) setState(() => _pullDistance = 0);
+        // },
+        builder: (context, child, controller) {
+          _refreshController = controller;
+
           return Stack(
             children: [
               child, // The CustomScrollView (List + App Bar)
@@ -53,7 +73,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               if (controller.value > 0)
                 Positioned(
                   top:
-                      140, // Adjust this to sit right below your specific header
+                      180, // Adjust this to sit right below your specific header
                   left: 0,
                   right: 0,
                   child: Center(
@@ -82,9 +102,26 @@ class _HomePageState extends ConsumerState<HomePage> {
                 endIndent: 20, // Optional: space from the right
               ),
             ),
+            // 🔹 THE FIX: Dynamic White Space
+            // This AnimatedBuilder listens to the pull and grows the empty box
+            if (_refreshController != null)
+              AnimatedBuilder(
+                animation: _refreshController!,
+                builder: (context, _) {
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      // Push the list down by up to 100 pixels based on pull
+                      height: _refreshController!.value * 100,
+                    ),
+                  );
+                },
+              )
+            else
+              const SliverToBoxAdapter(child: SizedBox.shrink()),
 
             // 2. Body Content
             jobsAsync.when(
+              skipLoadingOnReload: true,
               loading: () => const SliverFillRemaining(
                 hasScrollBody: false,
                 //child: Center(child: FeatherSvgLoader()),

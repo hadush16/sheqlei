@@ -11,6 +11,26 @@ class JobDetailsScreen extends StatefulWidget {
 
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
   bool isApplied = false;
+  bool success = true; // example
+  void _showCustomSnackBar(BuildContext context, bool isApplied) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isApplied ? 'Applied successfully' : 'Application canceled',
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        backgroundColor: const Color(
+          0xFF323232,
+        ), // Dark grey/black like the image
+        behavior: SnackBarBehavior.floating, // Makes it float
+        width: 200, // Fixed width to make it compact
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +50,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 21),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -73,18 +93,24 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             // _buildSection("", [
             //   widget.job.details?.location ?? "Location not specified",
             // ]),
-            _buildSection("", [widget.job.shortDescription]),
+            _buildSection("", widget.job.shortDescription), // Paragraph
 
             _buildSection(
               "Qualifications",
-              widget.job.details?.qualifications ?? [],
-            ),
-            _buildSection("Experience", widget.job.details?.experience ?? []),
+              widget.job.details?.qualifications ?? "",
+            ), // Paragraph
+
+            _buildSection(
+              "Experience",
+              widget.job.details?.experience ?? "",
+            ), // Paragraph
+            // 👈 Pass List for Skills to enable bullet points
             _buildSection(
               "Skills & Knowledge",
               widget.job.details?.skills ?? [],
             ),
-            _buildSection("discription", widget.job.details?.discription ?? []),
+
+            _buildSection("Description", widget.job.details?.description ?? ""),
 
             const SizedBox(height: 30),
 
@@ -97,6 +123,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     onPressed: () {
                       setState(() {
                         isApplied = !isApplied;
+
+                        _showCustomSnackBar(context, isApplied);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -147,30 +175,68 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     );
   }
 
-  Widget _buildSection(String title, List<String> points) {
-    if (points.isEmpty) return const SizedBox.shrink();
+  Widget _buildSection(String title, dynamic content) {
+    if (content == null ||
+        (content is String && content.isEmpty) ||
+        (content is List && content.isEmpty)) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          ...points.map(
-            (point) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                title == "" ? point : "— $point",
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.7),
-                  height: 1.4,
+          if (title.isNotEmpty) ...[
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12), // Increased space below title
+          ],
+
+          // 🎯 Multi-line Aligned Bullet Points (For Skills & Knowledge)
+          if (content is List<String>)
+            ...content.map(
+              (point) => Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 8,
+                ), // Space between items
+                child: Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align bullet to top of text
+                  children: [
+                    Text(
+                      "—",
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        point,
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.7),
+                          height: 1.5,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            )
+          // 📝 Standard Paragraphs (For Experience, Description, etc.)
+          else if (content is String)
+            Text(
+              content,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+                height: 1.6,
+                fontSize: 14,
+              ),
             ),
-          ),
         ],
       ),
     );

@@ -26,31 +26,41 @@ class Job {
       details: JobDetail.fromJson(json), // Parse the extra fields here
     );
   }
+
+  get id => null;
 }
 
 class JobDetail {
   final String location;
-  final List<String> qualifications;
-  final List<String> experience;
-  final List<String> skills;
-  final List<String>
-  discription; //  Added to hold additional description as a list
+  final String qualifications;
+  final String experience; // Changed to String for paragraph
+  final List<String> skills; // Kept as List for bullet points
+  final String description; // Changed to String for paragraph
 
   JobDetail({
     required this.location,
     required this.qualifications,
     required this.experience,
     required this.skills,
-    required this.discription,
+    required this.description,
   });
 
   factory JobDetail.fromJson(Map<String, dynamic> json) {
+    // Helper to join lists into a single paragraph with newlines if needed
+    String _parseAsParagraph(dynamic input) {
+      if (input == null) return "Not specified";
+      if (input is List) return input.join("\n\n");
+      return input.toString();
+    }
+
     return JobDetail(
       location: json["location"] ?? "Not specified",
-      qualifications: List<String>.from(json["Qualifications"] ?? []),
-      experience: List<String>.from(json["Experience"] ?? []),
+      qualifications: json["Qualifications"] is List
+          ? (json["Qualifications"] as List).first.toString()
+          : (json["Qualifications"] ?? "Not specified"),
+      experience: _parseAsParagraph(json["Experience"]),
       skills: List<String>.from(json["Skills & Knowledge"] ?? []),
-      discription: List<String>.from(json["discription"] ?? []),
+      description: _parseAsParagraph(json["description"]),
     );
   }
 }

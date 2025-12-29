@@ -4,34 +4,29 @@
     "title": "Senior Python Developer",
     "company": "KeplerLab Co., Ltd.",
     "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
+    "location": "Full-time",
+    "Qualifications":"Bachelor’s degree with major in graphic design or a related field from an accredited college or university preferred.",
+    "Experience":"Bachelor’s degree with major in graphic design or a related field from an accredited college or university preferred.",
     "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
+      "Excellent knowledge of graphic and photo software",
+      "Good knowledge of web technology",
+      "Excellent oral and written communication, including presentation skills ",
+      "PC literate, including Microsoft Office products",
+      "Strong organizational skills — Excellent interpersonal skills ",
+      "Ability to work on multiple projects and meet deadlines",
+      "Ability to work in a team environment",
+      "Ability to meet or exceed Performance Competencies"
     ],
-    "description":["Responsible for building backend systems using Django and PostgreSQL.",
-    "Collaborate with cross-functional teams to define, design, and ship new features.",
-    "Identify and fix bottlenecks and bugs in applications."
-  ],
+    "description":["For a career path that is both challenging and rewarding, join Sedgwick’s talented team of 27,000 colleagues around the globe. Sedgwick is a leading provider of technology- enabled risk, benefits and integrated business solutions. Taking care of people is at the heart of everything we do. Millions of people and organizations count on Sedgwick each year to take care of their needs when they face a major life event or something unexpected happens. Whether they have a workplace injury, suffer property or financial loss or damage from a natural or manmade disaster, are involved in an auto or other type of accident, or need time away from work for the birth of a child or another medical situation, we are here to provide compassionate care and expert guidance. Our clients depend on our talented colleagues to take care of their most valuable assets—their employees, their customers and their property. At Sedgwick, caring counts®. Join our team of creative and caring people of all backgrounds, and help us make a difference in the lives of others.",
+    "PRIMARY PURPOSE: To design and produce presentations, technical and conceptual web graphics, interactive marketing materials, and print materials."],
 
     "tags": ["Full-time", "Expert", "$25-$30/hr"]
   }
   ,{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
+    "time": "1h ago",
+    "title": "Junior DevOps Engineer",
     "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
+    "shortDescription": "We need one to Work with fellow DevOps engineers.",
     "location": "Remote",
     "Qualifications": [
       "5+ years of experience in Python development.",
@@ -50,37 +45,13 @@
     ],
     "description":"Responsible for building backend systems using Django and PostgreSQL.",
 
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
+    "tags": ["Contract", "Intermediate", "$15hr"]
   },
   {
-    "time": "30m ago",
-    "title": "Senior Python Developer",
+    "time": "4h ago",
+    "title": "Web Developer",
     "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
+    "shortDescription": "Entrust is seeking a Sitecore developer that will perform the accountabilities detailed below and other duties as assigned.",
     "location": "Remote",
     "Qualifications": [
       "5+ years of experience in Python development.",
@@ -102,13 +73,13 @@
     "Identify and fix bottlenecks and bugs in applications."
   ],
 
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
+    "tags": ["Part-time", "Senior", "$15/hr"]
   }
   ,{
     "time": "30m ago",
-    "title": "Senior Python Developer",
+    "title": "Quality Specialist",
     "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
+    "shortDescription": "iGaming company looking for QA Engineer to be based in Malta or Remotely in Europe.",
     "location": "Remote",
     "Qualifications": [
       "5+ years of experience in Python development.",
@@ -127,320 +98,12 @@
     ],
     "description":"Responsible for building backend systems using Django and PostgreSQL.",
 
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
+    "tags": ["Full-time", "beginer", "$5-$15/hr"]
   },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
+    "time": "9d ago",
+    "title": "UI/UX Designer",
     "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },
-  {
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":["Responsible for building backend systems using Django and PostgreSQL.",
-    "Collaborate with cross-functional teams to define, design, and ship new features.",
-    "Identify and fix bottlenecks and bugs in applications."
-  ],
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  }
-  ,{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },
-  {
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":["Responsible for building backend systems using Django and PostgreSQL.",
-    "Collaborate with cross-functional teams to define, design, and ship new features.",
-    "Identify and fix bottlenecks and bugs in applications."
-  ],
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  }
-  ,{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },
-  {
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":["Responsible for building backend systems using Django and PostgreSQL.",
-    "Collaborate with cross-functional teams to define, design, and ship new features.",
-    "Identify and fix bottlenecks and bugs in applications."
-  ],
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  }
-  ,{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },
-  {
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":["Responsible for building backend systems using Django and PostgreSQL.",
-    "Collaborate with cross-functional teams to define, design, and ship new features.",
-    "Identify and fix bottlenecks and bugs in applications."
-  ],
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  }
-  ,{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
-    "location": "Remote",
-    "Qualifications": [
-      "5+ years of experience in Python development.",
-      "Proficiency in Django and PostgreSQL.",
-      "Experience with RESTful API design."
-    ],
-    "Experience": [
-      "Develop and maintain backend services.",
-      "Collaborate with frontend developers to integrate user-facing elements.",
-      "Optimize applications for maximum speed and scalability."
-    ],
-    "Skills & Knowledge": [
-      "Strong understanding of Python and Django framework.",
-      "Experience with database management using PostgreSQL.",
-      "Familiarity with version control systems like Git."
-    ],
-    "description":"Responsible for building backend systems using Django and PostgreSQL.",
-
-    "tags": ["Full-time", "Expert", "$25-$30/hr"]
-  },{
-    "time": "30m ago",
-    "title": "Senior Python Developer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a leading iGaming software development company specializing in creating innovative solutions for online gaming platforms.",
+    "shortDescription": "We’re looking for an experienced and talented UI designer to design and shape unique, user-centric design systems and experiences.",
     "location": "Remote",
     "Qualifications": [
       "5+ years of experience in Python development.",
@@ -461,5 +124,6 @@
 
     "tags": ["Full-time", "Expert", "$25-$30/hr"]
   }
+ 
   
 ]
