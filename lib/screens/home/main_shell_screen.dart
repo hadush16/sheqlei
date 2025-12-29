@@ -16,7 +16,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   Widget build(BuildContext context) {
     // List of screens for each tab
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       HomePage(username: widget.username),
       const Scaffold(body: Center(child: Text("Dashboard"))),
       const Scaffold(body: Center(child: Text("Favorites"))),
@@ -24,7 +24,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     ];
 
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _pages),
+      body: IndexedStack(index: _currentIndex, children: pages),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: _currentIndex,
         onTap: (index) {

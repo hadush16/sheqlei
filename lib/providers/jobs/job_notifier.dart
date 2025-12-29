@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/service/job_api.dart';
-import '../models/job.dart';
+import '../../models/job.dart';
 
 class JobsNotifier extends AsyncNotifier<List<Job>> {
   int _page = 1;
@@ -30,7 +30,7 @@ class JobsNotifier extends AsyncNotifier<List<Job>> {
 
       // We don't necessarily reset _page to 1 here because the user
       // might still be at the bottom of a long list they've already paged through.
-    } catch (e, st) {
+    } catch (e) {
       // Optional: Handle error without destroying existing list
       // state = AsyncError(e, st);
     }

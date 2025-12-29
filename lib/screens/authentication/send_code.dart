@@ -143,7 +143,7 @@ class _PasswordResetState extends ConsumerState<PasswordReset> {
 }
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  ResetPasswordScreen({super.key, required this.email});
+  const ResetPasswordScreen({super.key, required this.email});
   final String email;
 
   @override
@@ -227,6 +227,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       isPassword: true,
                       obscureText: state.obscure,
                       onChanged: notifier.setPassword,
+                      validator: (value) =>
+                          AppValidators.validatePassword(_newPassCtrl.text),
                       hasError:
                           state.confirmPassword.isNotEmpty &&
                           !state.passwordsMatch,
@@ -244,6 +246,12 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       // hasError: _generalError != null,
 
                       // Logic for red line/error
+                      validator: (value) =>
+                          AppValidators.validateConfirmPassword(
+                            _newPassCtrl
+                                .text, // Pass the text from the first field
+                            value,
+                          ),
                       hasError:
                           state.confirmPassword.isNotEmpty &&
                           !state.passwordsMatch,

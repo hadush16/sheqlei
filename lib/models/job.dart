@@ -47,7 +47,7 @@ class JobDetail {
 
   factory JobDetail.fromJson(Map<String, dynamic> json) {
     // Helper to join lists into a single paragraph with newlines if needed
-    String _parseAsParagraph(dynamic input) {
+    String parseAsParagraph(dynamic input) {
       if (input == null) return "Not specified";
       if (input is List) return input.join("\n\n");
       return input.toString();
@@ -58,9 +58,9 @@ class JobDetail {
       qualifications: json["Qualifications"] is List
           ? (json["Qualifications"] as List).first.toString()
           : (json["Qualifications"] ?? "Not specified"),
-      experience: _parseAsParagraph(json["Experience"]),
+      experience: parseAsParagraph(json["Experience"]),
       skills: List<String>.from(json["Skills & Knowledge"] ?? []),
-      description: _parseAsParagraph(json["description"]),
+      description: parseAsParagraph(json["description"]),
     );
   }
 }

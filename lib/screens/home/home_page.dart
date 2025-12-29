@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sheqlee/screens/home/filter_page.dart';
 import 'package:sheqlee/screens/home/job_details_screen.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 //import 'dart:math' as math;
 import 'package:sheqlee/widget/app_sliver_header.dart';
 import 'package:sheqlee/widget/job_shimmer_loading.dart';
 import '../../models/job.dart';
-import 'package:sheqlee/providers/job_notifier.dart';
+import 'package:sheqlee/providers/jobs/job_notifier.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final String username;
@@ -39,7 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final jobsAsync = ref.watch(jobsProvider);
     final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
-    double _pullDistance = 0;
+    double pullDistance = 0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -51,7 +52,13 @@ class _HomePageState extends ConsumerState<HomePage> {
           //side: BorderSide(color: Colors.white, width: 2),
         ),
 
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => FilterScreen()),
+            (route) => true, // This clears the entire stack
+          );
+        },
         child: SvgPicture.asset(
           'assets/icons/search-alt2.svg',
           color: Colors.white,

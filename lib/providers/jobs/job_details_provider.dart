@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/job.dart';
-import 'package:sheqlee/providers/job_notifier.dart';
+import '../../models/job.dart';
+import 'package:sheqlee/providers/jobs/job_notifier.dart';
 
 final jobDetailsProvider = Provider.family<Job?, int>((ref, index) {
   final jobsState = ref.watch(jobsProvider);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sheqlee/providers/agreement_provider.dart';
+import 'package:sheqlee/providers/auth/agreement_provider.dart';
 import 'package:sheqlee/screens/authentication/sign_up.dart';
 import 'package:sheqlee/widget/app_primary_button.dart';
 import 'package:sheqlee/widget/backbutton.dart';

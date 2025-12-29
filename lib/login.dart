@@ -196,11 +196,12 @@ class _IntroLoginScreenState extends State<IntroLoginScreen> {
                     enabled: true, // Set to true to show purple color
                     loading: false, // Set to true when performing login logic
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
                           builder: (_) => const LoginFormScreen(),
                         ),
+                        (route) => false,
                       );
                     },
                   ),
