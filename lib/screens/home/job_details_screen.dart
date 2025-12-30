@@ -56,19 +56,19 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           children: [
             const SizedBox(height: 10),
             // Tags and Favorite Row
-            Row(
-              children: [
-                Expanded(
-                  child: Wrap(
-                    spacing: 8,
-                    children: widget.job.tags
-                        .map((tag) => _buildTag(tag))
-                        .toList(),
-                  ),
-                ),
-                const Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Wrap(
+            //         spacing: 8,
+            //         children: widget.job.tags
+            //             .map((tag) => _buildTag(tag))
+            //             .toList(),
+            //       ),
+            //     ),
+            //     const Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
+            //   ],
+            // ),
             const SizedBox(height: 20),
             // Title and Company
             Text(

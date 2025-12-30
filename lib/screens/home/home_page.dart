@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
 import 'package:sheqlee/screens/home/filter_page.dart';
 import 'package:sheqlee/screens/home/job_details_screen.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-//import 'dart:math' as math;
 import 'package:sheqlee/widget/app_sliver_header.dart';
 import 'package:sheqlee/widget/job_shimmer_loading.dart';
-import '../../models/job.dart';
+import 'package:sheqlee/models/job.dart';
 import 'package:sheqlee/providers/jobs/job_notifier.dart';
+// Ensure you import your job type and level models and providers
+import 'package:sheqlee/models/job_type_model.dart';
+import 'package:sheqlee/models/job_level_model.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final String username;
@@ -22,16 +24,14 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
   IndicatorController? _refreshController;
+
   @override
   void initState() {
     super.initState();
-    // 🔹 Bottom Pagination Listener
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
-        ref
-            .read(jobsProvider.notifier)
-            .fetchMoreJobs(); // Your bottom fetch logic
+        ref.read(jobsProvider.notifier).fetchMoreJobs();
       }
     });
   }
@@ -40,47 +40,33 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final jobsAsync = ref.watch(jobsProvider);
     final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
-    double pullDistance = 0;
 
     return Scaffold(
       backgroundColor: Colors.white,
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff8967B3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
-          //side: BorderSide(color: Colors.white, width: 2),
-        ),
-
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
         onPressed: () {
-          Navigator.pushAndRemoveUntil(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FilterScreen()),
-            (route) => true, // This clears the entire stack
+            MaterialPageRoute(builder: (context) => const FilterScreen()),
           );
         },
         child: SvgPicture.asset(
           'assets/icons/search-alt2.svg',
-          color: Colors.white,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
       ),
       body: CustomRefreshIndicator(
         onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
-        //       onStateChanged: (state) {
-        //   if (state.isIdle) setState(() => _pullDistance = 0);
-        // },
         builder: (context, child, controller) {
           _refreshController = controller;
-
           return Stack(
             children: [
-              child, // The CustomScrollView (List + App Bar)
-              // 🔹 Custom SVG Spinner: Positioned at top-center below the header area
-              // Using controller.status to check if we are pulling or refreshing
+              child,
               if (controller.value > 0)
                 Positioned(
-                  top:
-                      180, // Adjust this to sit right below your specific header
+                  top: 180,
                   left: 0,
                   right: 0,
                   child: Center(
@@ -96,93 +82,33 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
-            // 1. App Bar that resizes automatically
             AppSliverHeader(username: widget.username),
-
-            //const Divider(),
             const SliverToBoxAdapter(
               child: Divider(
-                height: 1, // The space the divider occupies
-                thickness: 1, // The thickness of the line
-                color: Color(0xFFEEEEEE), // Adjust color to match your UI
-                indent: 20, // Optional: space from the left
-                endIndent: 20, // Optional: space from the right
+                height: 1,
+                thickness: 1,
+                color: Color(0xFFEEEEEE),
+                indent: 20,
+                endIndent: 20,
               ),
             ),
-            // 🔹 THE FIX: Dynamic White Space
-            // This AnimatedBuilder listens to the pull and grows the empty box
             if (_refreshController != null)
               AnimatedBuilder(
                 animation: _refreshController!,
-                builder: (context, _) {
-                  return SliverToBoxAdapter(
-                    child: SizedBox(
-                      // Push the list down by up to 100 pixels based on pull
-                      height: _refreshController!.value * 100,
-                    ),
-                  );
-                },
-              )
-            else
-              const SliverToBoxAdapter(child: SizedBox.shrink()),
-
-            // 2. Body Content
+                builder: (context, _) => SliverToBoxAdapter(
+                  child: SizedBox(height: _refreshController!.value * 100),
+                ),
+              ),
             jobsAsync.when(
               skipLoadingOnReload: true,
               loading: () => const SliverFillRemaining(
-                hasScrollBody: false,
-                //child: Center(child: FeatherSvgLoader()),
+                child: Center(child: CircularProgressIndicator()),
               ),
-              error: (err, stack) => SliverToBoxAdapter(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text("Error: $err"),
-                  ),
-                ),
-              ),
+              error: (err, stack) =>
+                  SliverToBoxAdapter(child: Center(child: Text("Error: $err"))),
               data: (jobs) {
                 if (jobs.isEmpty) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // Centers vertically
-                        children: [
-                          // 1. Your Sad SVG Picture
-                          SvgPicture.asset(
-                            'assets/icons/sad.svg', // Ensure this path matches your file
-                            width: 120,
-                            height: 120,
-                            // Optional: Match the purple theme
-                            colorFilter: ColorFilter.mode(
-                              Colors.purple.withOpacity(0.3),
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          // 2. The Text Message
-                          const Text(
-                            "No job posts found.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "Please try again later or pull to refresh.",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black38,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return _buildEmptyState();
                 }
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -192,8 +118,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                 );
               },
             ),
-
-            // 3. Bottom Loader (Pagination)
             if (isFetchingMore)
               const SliverToBoxAdapter(
                 child: Padding(
@@ -201,7 +125,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   child: FeatherSvgLoader(size: 30),
                 ),
               ),
-
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
@@ -210,54 +133,89 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildJobItem(Job job) {
+    final allTypes = ref.watch(jobTypesProvider).value ?? [];
+    final allLevels = ref.watch(jobLevelsProvider).value ?? [];
+
+    // 2. RESOLVE the IDs to full names
+    // We search the list for a match; if not found, we show nothing
+    final String typeName = allTypes
+        .firstWhere(
+          (t) => t.id == job.typeId,
+          orElse: () => JobType(id: '', name: ''),
+        )
+        .name;
+
+    final String levelName = allLevels
+        .firstWhere(
+          (l) => l.id == job.levelId,
+          orElse: () => JobLevel(id: '', name: ''),
+        )
+        .name;
+
+    // 3. Prepare the display list (Only including non-empty strings)
+    final List<String> displayTags = [
+      if (typeName.isNotEmpty) typeName,
+      if (levelName.isNotEmpty) levelName,
+      if (job.salary.isNotEmpty) job.salary,
+    ];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: InkWell(
-        // 🔹 NAVIGATION ADDED HERE
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => JobDetailsScreen(job: job)),
           );
         },
-        borderRadius: BorderRadius.circular(
-          12,
-        ), // Match the ripple effect to your card
+        borderRadius: BorderRadius.circular(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 1. Time and Company (Optional info)
             Text(
-              "${job.time} • ${job.company}",
+              "${job.time} ",
               style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
             const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    job.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
-              ],
+
+            // 2. Job Title
+            Text(
+              job.title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
+
+            // 3. Short Description
             Text(
               job.shortDescription,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 14, color: Colors.black87),
             ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: job.tags.map((tag) => _buildTag(tag)).toList(),
+            const SizedBox(height: 12),
+
+            // 4. THE ROW: Dynamic Tags (Type, Level, Salary) + Favorite Icon
+            // This is now positioned BELOW the description as requested
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: displayTags
+                        .where((tag) => tag.isNotEmpty)
+                        .map((tag) => _buildTag(tag))
+                        .toList(),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             const Divider(),
@@ -271,11 +229,367 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.grey.shade300),
       ),
-      // This ensures that even if 'tag' is null, the app won't crash
-      child: Text(tag ?? "", style: const TextStyle(fontSize: 12)),
+      child: Text(
+        tag,
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.black87,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/sad.svg',
+              width: 120,
+              height: 120,
+              colorFilter: ColorFilter.mode(
+                Colors.purple.withOpacity(0.3),
+                BlendMode.srcIn,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "No job posts found.",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+// import 'package:flutter_svg/svg.dart';
+// import 'package:sheqlee/models/job_type_model.dart';
+// import 'package:sheqlee/screens/home/filter_page.dart';
+// import 'package:sheqlee/screens/home/job_details_screen.dart';
+// //import 'package:flutter_svg/flutter_svg.dart';
+// //import 'dart:math' as math;
+// import 'package:sheqlee/widget/app_sliver_header.dart';
+// import 'package:sheqlee/widget/job_shimmer_loading.dart';
+// import 'package:sheqlee/models/job.dart';
+// import 'package:sheqlee/providers/jobs/job_notifier.dart';
+
+// class HomePage extends ConsumerStatefulWidget {
+//   final String username;
+//   const HomePage({super.key, required this.username});
+
+//   @override
+//   ConsumerState<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends ConsumerState<HomePage> {
+//   final ScrollController _scrollController = ScrollController();
+//   IndicatorController? _refreshController;
+//   @override
+//   void initState() {
+//     super.initState();
+//     // 🔹 Bottom Pagination Listener
+//     _scrollController.addListener(() {
+//       if (_scrollController.position.pixels >=
+//           _scrollController.position.maxScrollExtent - 200) {
+//         ref
+//             .read(jobsProvider.notifier)
+//             .fetchMoreJobs(); // Your bottom fetch logic
+//       }
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final jobsAsync = ref.watch(jobsProvider);
+//     final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
+//     double pullDistance = 0;
+   
+
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+
+//       floatingActionButton: FloatingActionButton(
+//         backgroundColor: const Color(0xff8967B3),
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(40),
+//           //side: BorderSide(color: Colors.white, width: 2),
+//         ),
+
+//         onPressed: () {
+//           Navigator.pushAndRemoveUntil(
+//             context,
+//             MaterialPageRoute(builder: (context) => FilterScreen()),
+//             (route) => true, // This clears the entire stack
+//           );
+//         },
+//         child: SvgPicture.asset(
+//           'assets/icons/search-alt2.svg',
+//           color: Colors.white,
+//         ),
+//       ),
+//       body: CustomRefreshIndicator(
+//         onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
+//         //       onStateChanged: (state) {
+//         //   if (state.isIdle) setState(() => _pullDistance = 0);
+//         // },
+//         builder: (context, child, controller) {
+//           _refreshController = controller;
+
+//           return Stack(
+//             children: [
+//               child, // The CustomScrollView (List + App Bar)
+//               // 🔹 Custom SVG Spinner: Positioned at top-center below the header area
+//               // Using controller.status to check if we are pulling or refreshing
+//               if (controller.value > 0)
+//                 Positioned(
+//                   top:
+//                       180, // Adjust this to sit right below your specific header
+//                   left: 0,
+//                   right: 0,
+//                   child: Center(
+//                     child: Opacity(
+//                       opacity: controller.value.clamp(0.0, 1.0),
+//                       child: const FeatherSvgLoader(size: 35),
+//                     ),
+//                   ),
+//                 ),
+//             ],
+//           );
+//         },
+//         child: CustomScrollView(
+//           controller: _scrollController,
+//           slivers: [
+//             // 1. App Bar that resizes automatically
+//             AppSliverHeader(username: widget.username),
+
+//             //const Divider(),
+//             const SliverToBoxAdapter(
+//               child: Divider(
+//                 height: 1, // The space the divider occupies
+//                 thickness: 1, // The thickness of the line
+//                 color: Color(0xFFEEEEEE), // Adjust color to match your UI
+//                 indent: 20, // Optional: space from the left
+//                 endIndent: 20, // Optional: space from the right
+//               ),
+//             ),
+//             // 🔹 THE FIX: Dynamic White Space
+//             // This AnimatedBuilder listens to the pull and grows the empty box
+//             if (_refreshController != null)
+//               AnimatedBuilder(
+//                 animation: _refreshController!,
+//                 builder: (context, _) {
+//                   return SliverToBoxAdapter(
+//                     child: SizedBox(
+//                       // Push the list down by up to 100 pixels based on pull
+//                       height: _refreshController!.value * 100,
+//                     ),
+//                   );
+//                 },
+//               )
+//             else
+//               const SliverToBoxAdapter(child: SizedBox.shrink()),
+
+//             // 2. Body Content
+//             jobsAsync.when(
+//               skipLoadingOnReload: true,
+//               loading: () => const SliverFillRemaining(
+//                 hasScrollBody: false,
+//                 //child: Center(child: FeatherSvgLoader()),
+//               ),
+//               error: (err, stack) => SliverToBoxAdapter(
+//                 child: Center(
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(20.0),
+//                     child: Text("Error: $err"),
+//                   ),
+//                 ),
+//               ),
+//               data: (jobs) {
+//                 if (jobs.isEmpty) {
+//                   return SliverFillRemaining(
+//                     hasScrollBody: false,
+//                     child: Center(
+//                       child: Column(
+//                         mainAxisAlignment:
+//                             MainAxisAlignment.center, // Centers vertically
+//                         children: [
+//                           // 1. Your Sad SVG Picture
+//                           SvgPicture.asset(
+//                             'assets/icons/sad.svg', // Ensure this path matches your file
+//                             width: 120,
+//                             height: 120,
+//                             // Optional: Match the purple theme
+//                             colorFilter: ColorFilter.mode(
+//                               Colors.purple.withOpacity(0.3),
+//                               BlendMode.srcIn,
+//                             ),
+//                           ),
+//                           const SizedBox(height: 20),
+//                           // 2. The Text Message
+//                           const Text(
+//                             "No job posts found.",
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               color: Colors.grey,
+//                               fontWeight: FontWeight.w500,
+//                             ),
+//                           ),
+//                           const SizedBox(height: 8),
+//                           const Text(
+//                             "Please try again later or pull to refresh.",
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Colors.black38,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   );
+//                 }
+//                 return SliverList(
+//                   delegate: SliverChildBuilderDelegate(
+//                     (context, index) => _buildJobItem(jobs[index]),
+//                     childCount: jobs.length,
+//                   ),
+//                 );
+//               },
+//             ),
+
+//             // 3. Bottom Loader (Pagination)
+//             if (isFetchingMore)
+//               const SliverToBoxAdapter(
+//                 child: Padding(
+//                   padding: EdgeInsets.symmetric(vertical: 30),
+//                   child: FeatherSvgLoader(size: 30),
+//                 ),
+//               ),
+
+//             const SliverToBoxAdapter(child: SizedBox(height: 100)),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildJobItem(Job job) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//       child: InkWell(
+//         // 🔹 NAVIGATION ADDED HERE
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => JobDetailsScreen(job: job)),
+//           );
+//         },
+//         borderRadius: BorderRadius.circular(
+//           12,
+//         ), // Match the ripple effect to your card
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Text(
+//             //   "${job.time} • ${job.company}",
+//             //   style: const TextStyle(color: Colors.grey, fontSize: 12),
+//             // ),
+//             const SizedBox(height: 4),
+//             // 1. Prepare your dynamic tags from the IDs
+
+// // 2. The Row Layout
+// Row(
+//   crossAxisAlignment: CrossAxisAlignment.end, // Aligns heart with the bottom of tags
+//   children: [
+//     Expanded(
+//       child: Wrap(
+//         spacing: 8,      // Horizontal space between chips
+//         runSpacing: 8,   // Vertical space if they wrap to a second line
+//         children: displayTags
+//             .where((tag) => tag.isNotEmpty) // Safety check
+//             .map((tag) => _buildTag(tag))
+//             .toList(),
+//       ),
+//     ),
+//     const Padding(
+//       padding: EdgeInsets.only(left: 8.0),
+//       child: Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
+//     ),
+//   ],
+// ),
+//             // Row(
+//             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             //   children: [
+//             //     Expanded(
+//             //       child: Text(
+//             //         job.title,
+//             //         style: const TextStyle(
+//             //           fontSize: 18,
+//             //           fontWeight: FontWeight.bold,
+//             //         ),
+//             //       ),
+//             //     ),
+//             //     const Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
+//             //   ],
+//             // ),
+//             const SizedBox(height: 6),
+//             Text(
+//               job.shortDescription,
+//               maxLines: 2,
+//               overflow: TextOverflow.ellipsis,
+//               style: const TextStyle(fontSize: 14, color: Colors.black87),
+//             ),
+//             const SizedBox(height: 10),
+//             // Wrap(
+//             //   spacing: 8,
+//             //   runSpacing: 6,
+//             //   children: job.tags.map((tag) => _buildTag(tag)).toList(),
+//             // ),
+//             const SizedBox(height: 12),
+//             const Divider(),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//  Widget _buildTag(String tag) {
+//   return Container(
+//     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//     decoration: BoxDecoration(
+//       color: Colors.white, // Keep background clean
+//       borderRadius: BorderRadius.circular(20),
+//       border: Border.all(color: Colors.grey.shade300), // Light border from image
+//     ),
+//     child: Text(
+//       tag, 
+//       style: const TextStyle(
+//         fontSize: 12, 
+//         color: Colors.black87,
+//         fontWeight: FontWeight.w400,
+//       ),
+//     ),
+//   );
+// }
+// }
