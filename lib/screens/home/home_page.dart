@@ -9,7 +9,6 @@ import 'package:sheqlee/widget/app_sliver_header.dart';
 import 'package:sheqlee/widget/job_shimmer_loading.dart';
 import 'package:sheqlee/models/job.dart';
 import 'package:sheqlee/providers/jobs/job_notifier.dart';
-// Ensure you import your job type and level models and providers
 import 'package:sheqlee/models/job_type_model.dart';
 import 'package:sheqlee/models/job_level_model.dart';
 
@@ -28,18 +27,35 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        ref.read(jobsProvider.notifier).fetchMoreJobs();
-      }
-    });
+    _scrollController.addListener(_onScroll);
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels >=
+    //       _scrollController.position.maxScrollExtent - 200) {
+    //     ref.read(jobsProvider.notifier).fetchMoreJobs();
+    //   }
+    // });
+  }
+
+  void _onScroll() {
+    // If we are 200 pixels from the bottom, trigger the fetch
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      ref.read(jobsProvider.notifier).fetchMoreJobs();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final jobsAsync = ref.watch(jobsProvider);
-    final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
+    // final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
+    final notifier = ref.watch(jobsProvider.notifier);
+    final isFetchingMore = notifier.isFetchingMore;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -102,7 +118,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             jobsAsync.when(
               skipLoadingOnReload: true,
               loading: () => const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
+                hasScrollBody: false,
+                // child: Center(child: FeatherSvgLoader(size: 40)),
               ),
               error: (err, stack) =>
                   SliverToBoxAdapter(child: Center(child: Text("Error: $err"))),
