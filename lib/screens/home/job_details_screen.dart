@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sheqlee/models/job_level_model.dart';
-import 'package:sheqlee/models/job_type_model.dart';
 import 'package:sheqlee/providers/jobs/tags_notifier.dart';
 import 'package:sheqlee/widget/backbutton.dart';
 import 'package:sheqlee/widget/favotite_icon.dart';
 import 'package:sheqlee/widget/job_metadata_section.dart';
 import '../../models/job.dart';
-import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
   final Job job;
@@ -32,9 +29,9 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
 
   void _onScroll() {
     // If user scrolls down more than 100 pixels, show fav in header
-    if (_scrollController.offset > 100 && !_showFavInHeader) {
+    if (_scrollController.offset > 80 && !_showFavInHeader) {
       setState(() => _showFavInHeader = true);
-    } else if (_scrollController.offset <= 100 && _showFavInHeader) {
+    } else if (_scrollController.offset <= 80 && _showFavInHeader) {
       setState(() => _showFavInHeader = false);
     }
   }
@@ -46,6 +43,10 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
   }
 
   void _showCustomSnackBar(BuildContext context, bool isApplied) {
+    ScaffoldMessenger.of(
+      context,
+    ).hideCurrentSnackBar(); // Clears any existing snackbar first
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -53,43 +54,22 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.white, fontSize: 14),
         ),
-        backgroundColor: const Color(
-          0xFF323232,
-        ), // Dark grey/black like the image
-        behavior: SnackBarBehavior.floating, // Makes it float
-        width: 200, // Fixed width to make it compact
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        backgroundColor: const Color(0xFF323232),
+        behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+
+        margin: EdgeInsets.only(
+          bottom: 70,
+          left: MediaQuery.of(context).size.width * 0.25,
+          right: MediaQuery.of(context).size.width * 0.19,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final allTypes = ref.watch(jobTypesProvider).value ?? [];
-    final allLevels = ref.watch(jobLevelsProvider).value ?? [];
-
-    final String typeName = allTypes
-        .firstWhere(
-          (t) => t.id == widget.job.typeId,
-          orElse: () => JobType(id: '', name: ''),
-        )
-        .name;
-
-    final String levelName = allLevels
-        .firstWhere(
-          (l) => l.id == widget.job.levelId,
-          orElse: () => JobLevel(id: '', name: ''),
-        )
-        .name;
-
-    // 2. Filter out empty strings so we don't show empty boxes
-    final List<String> topTags = [
-      if (typeName.isNotEmpty) typeName,
-      if (levelName.isNotEmpty) levelName,
-      if (widget.job.salary.isNotEmpty) widget.job.salary,
-    ];
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -97,23 +77,24 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 60,
+              height: 89,
               width: double.infinity,
               child: Stack(
                 alignment:
                     Alignment.center, // Vertically centers items in the stack
                 children: [
-                  Positioned(left: 27, top: 26, child: AppBackButton()),
+                  Positioned(left: 27, top: 40, child: AppBackButton()),
 
                   const Positioned(
                     left: 150,
                     right: 80,
-                    top: 39,
+                    top: 49,
                     child: Text(
                       "Job Details",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'pretendard',
                         color: Colors.black,
                       ),
                     ),
@@ -121,6 +102,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                   if (_showFavInHeader)
                     Positioned(
                       right: 20,
+                      top: 49,
                       child: FavoriteButton(jobId: widget.job.id),
                     ),
                 ],
@@ -150,43 +132,35 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                         ), // Use widget.job here too
                       ],
                     ),
-                    // Tags and Favorite Row
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: Wrap(
-                    //         spacing: 8,
-                    //         children: widget.job.tags
-                    //             .map((tag) => _buildTag(tag))
-                    //             .toList(),
-                    //       ),
-                    //     ),
-                    //     const Icon(Icons.favorite_border, color: Color(0xffa06cd5)),
-                    //   ],
-                    // ),
+
                     const SizedBox(height: 20),
                     // Title and Company
                     Text(
                       widget.job.title,
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'pretendard',
+                        color: Color(0xff000000),
                       ),
                     ),
                     Text(
                       widget.job.time,
-                      style: const TextStyle(color: Colors.grey, fontSize: 13),
+                      style: const TextStyle(
+                        color: Color(0xff909090),
+                        fontSize: 10,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       widget.job.company,
                       style: const TextStyle(
                         color: Color(0xffa06cd5),
-                        decoration: TextDecoration.underline,
+                        //decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 23),
                     // Sections
                     // _buildSection("", [
                     //   widget.job.details?.location ?? "Location not specified",
@@ -320,10 +294,12 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                       CrossAxisAlignment.start, // Align bullet to top of text
                   children: [
                     Text(
-                      "—",
+                      "— ",
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'pretendard',
+                        fontSize: 14,
                       ),
                     ),
                     Expanded(

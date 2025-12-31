@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sheqlee/models/job.dart';
+import 'package:sheqlee/providers/jobs/job_notifier.dart';
 
-// This provider keeps track of which Job IDs are favorited
+// 1. The existing ID tracker
 class FavoritesNotifier extends StateNotifier<Set<String>> {
   FavoritesNotifier() : super({});
 
@@ -11,8 +13,6 @@ class FavoritesNotifier extends StateNotifier<Set<String>> {
       state = {...state}..add(jobId);
     }
   }
-
-  bool isFavorite(String jobId) => state.contains(jobId);
 }
 
 final favoritesProvider = StateNotifierProvider<FavoritesNotifier, Set<String>>(
@@ -20,3 +20,12 @@ final favoritesProvider = StateNotifierProvider<FavoritesNotifier, Set<String>>(
     return FavoritesNotifier();
   },
 );
+
+// 2. NEW: The Filtered Jobs List Provider
+final favoritedJobsProvider = Provider<List<Job>>((ref) {
+  final allJobs = ref.watch(jobsProvider).value ?? [];
+  final favoriteIds = ref.watch(favoritesProvider);
+
+  // Return only jobs whose ID exists in the favorites set
+  return allJobs.where((job) => favoriteIds.contains(job.id)).toList();
+});

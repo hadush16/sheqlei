@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sheqlee/screens/home/favorites_screen.dart';
 import 'package:sheqlee/widget/app_bottom_nav.dart';
 import 'home_page.dart'; // Import your HomePage file
 
@@ -19,7 +20,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     final List<Widget> pages = [
       HomePage(username: widget.username),
       const Scaffold(body: Center(child: Text("Dashboard"))),
-      const Scaffold(body: Center(child: Text("Favorites"))),
+      const Scaffold(body: FavoritesScreen()),
       const Scaffold(body: Center(child: Text("Account"))),
     ];
 

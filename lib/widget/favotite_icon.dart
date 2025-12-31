@@ -20,12 +20,12 @@ class FavoriteButton extends ConsumerWidget {
       },
       child: SvgPicture.asset(
         isFavorite
-            ? 'assets/icons/heart - solid.svg'
-            : 'assets/icons/heart - outline.svg', // Ensure you have an outline version
-        colorFilter: ColorFilter.mode(
-          isFavorite ? const Color(0xffa06cd5) : Colors.grey,
-          BlendMode.srcIn,
-        ),
+            ? 'assets/icons/heart - solid (1).svg'
+            : 'assets/icons/heart - solid.svg', // Ensure you have an outline version
+        // colorFilter: ColorFilter.mode(
+        //   isFavorite ? const Color(0xffa06cd5) : Colors.grey,
+        //   BlendMode.srcIn,
+        // ),
         width: 22,
       ),
     );
