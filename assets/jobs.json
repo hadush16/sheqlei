@@ -1,6 +1,8 @@
 [
   {
     "_id": "64a1b001",
+    "categoryId": "cat_py_01", 
+    "tagIds": ["tag_py"],
     "typeId": "ft_01",
     "levelId": "lvl_03",
     "salary": "$25-$30/hr",
@@ -18,6 +20,8 @@
   },
   {
     "_id": "64a1b002",
+    "categoryId": "cat_Dev_01", 
+    "tagIds": ["tag_py", "tag_py","tag_asp"],
     "typeId": "ct_03",
     "levelId": "lvl_02",
     "salary": "$15hr",
@@ -33,6 +37,8 @@
   
   {
     "_id": "64a1b003",
+    "categoryId": "cat_web_01", 
+    "tagIds":["tag_js","tag_re","tag_rs","tag_java"],
     "typeId": "pt_02",
     "levelId": "lvl_04",
     "salary": "$15hr",
@@ -47,6 +53,8 @@
   },
   {
     "_id": "64a1b004",
+    "categoryId": "cat_Qu_01", 
+    "tagIds": ["tag_js", "tag_ts"],
     "typeId": "ft_01",
     "levelId": "lvl_01",
     "salary": "$25-$30/hr",
@@ -61,6 +69,7 @@
   },
   {
     "_id": "64a1b005",
+    "categoryId": "cat_modev_01", 
     "typeId": "ft_01",
     "levelId": "lvl_03",
     "salary": "$25-$30/hr",
@@ -75,6 +84,8 @@
   },
   {
     "_id": "64a1b006",
+    "categoryId": "cat_UI_01", 
+    "tagIds": ["tag_py","tag_cs"],
     "typeId": "ft_01",
     "levelId": "lvl_02",
     "salary": "$15hr",
@@ -86,52 +97,6 @@
     "Experience": "5+ years of Python development.",
     "Skills & Knowledge": ["Python", "Django", "PostgreSQL"],
     "description": "Full career path details here..."
-  },
-  {
-    "_id": "64a1b007",
-    "typeId": "ft_01",
-    "levelId": "lvl_02",
-    "salary": "$15hr",
-    "time": "11/09/2024",
-    "title": "Product Designer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a VC-backed, stealth, application-only platform for senior product designers to team up with the best companies on their next big thing.",
-    "Qualifications": "Bachelor's degree in design or related field.",
-    "Experience": "5+ years of Python development.",
-    "Skills & Knowledge": ["Python", "Django", "PostgreSQL"],
-    "description": "Full career path details here..."
-  }
-  ,
-  {
-    "_id": "64a1b008",
-    "typeId": "ft_01",
-    "levelId": "lvl_02",
-    "salary": "$15hr",
-    "time": "11/09/2024",
-    "title": "Product Designer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a VC-backed, stealth, application-only platform for senior product designers to team up with the best companies on their next big thing.",
-    "Qualifications": "Bachelor's degree in design or related field.",
-    "Experience": "5+ years of Python development.",
-    "Skills & Knowledge": ["Python", "Django", "PostgreSQL"],
-    "description": "Full career path details here..."
-  },
-  {
-    "_id": "64a1b009",
-    "typeId": "ft_01",
-    "levelId": "lvl_02",
-    "salary": "$15hr",
-    "time": "11/09/2024",
-    "title": "Product Designer",
-    "company": "KeplerLab Co., Ltd.",
-    "shortDescription": "KeplerLab is a VC-backed, stealth, application-only platform for senior product designers to team up with the best companies on their next big thing.",
-    "Qualifications": "Bachelor’s degree with major in graphic design or a related field from an accredited college or university preferred.",
-    "Experience": "Bachelor’s degree with major in graphic design or a related field from an accredited college or university preferred.",
-    "Skills & Knowledge": ["Excellent knowledge of graphic and photo software",
-    "Good knowledge of web technology", 
-    "Excellent oral and written communication, including presentation skills", "PC literate, including Microsoft Office products","Strong organizational skills","Excellent interpersonal skills","Ability to work on multiple projects and meet deadlines","Ability to work in a team environment", "Ability to meet or exceed Performance Competencies"],
-    "description": ["For a career path that is both challenging and rewarding, join Sedgwick’s talented team of 27,000 colleagues around the globe. Sedgwick is a leading provider of technology- enabled risk, benefits and integrated business solutions. Taking care of people is at the heart of everything we do. Millions of people and organizations count on Sedgwick each year to take care of their needs when they face a major life event or something unexpected happens. Whether they have a workplace injury, suffer property or financial loss or damage from a natural or manmade disaster, are involved in an auto or other type of accident, or need time away from work for the birth of a child or another medical situation, we are here to provide compassionate care and expert guidance. Our clients depend on our talented colleagues to take care of their most valuable assets—their employees, their customers and their property. At Sedgwick, caring counts®. Join our team of creative and caring people of all backgrounds, and help us make a difference in the lives of others.",
-     "PRIMARY PURPOSE: To design and produce presentations, technical and conceptual web graphics, interactive marketing materials, and print materials."]
   }
 
 ]

@@ -63,12 +63,12 @@ class AppTextField extends StatelessWidget {
                           ]
                         : null,
                     controller: controller,
+                    cursorColor: Color(0xff8967B3),
                     focusNode: focusNode,
                     obscureText: isPassword ? obscureText : false,
                     onChanged: onChanged,
                     keyboardType: keyboardType,
                     autofocus: autofocus, // Fixed: Now correctly applied
-                    cursorColor: Colors.black,
                     style: TextStyle(
                       fontSize: obscureText ? 40 : 23,
                       fontFamily: 'Pretendard',

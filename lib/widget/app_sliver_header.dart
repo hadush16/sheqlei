@@ -12,6 +12,7 @@ class AppSliverHeader extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       pinned: true,
       expandedHeight: 140,
       collapsedHeight: 80,
@@ -27,7 +28,7 @@ class AppSliverHeader extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.only(bottom: 0),
                 child: Row(
                   children: [
                     Transform.scale(
@@ -60,7 +61,6 @@ class AppSliverHeader extends StatelessWidget {
                             style: TextStyle(
                               color: const Color(0xffa06cd5),
                               fontSize: 12,
-                              decoration: TextDecoration.underline,
                             ),
                           ),
                       ],

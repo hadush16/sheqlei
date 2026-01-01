@@ -1,116 +1,68 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sheqlee/data/mock_data.dart';
 import '../models/filter_model.dart';
+// IMPORTANT: Import the file where your mockTags and mockCategories are located
+// import 'package:sheqlee/data/mock_data.dart';
 
-// 1. Fetching Data (MongoDB Placeholder)
-final filterDataProvider = FutureProvider<FilterData>((ref) async {
-  await Future.delayed(const Duration(milliseconds: 500));
+// --- SEARCH STATE LOGIC ---
 
-  final mockJson = {
-    "tags": [
-      {"_id": "t1", "name": "Java"},
-      {"_id": "t2", "name": "Python"},
-      {"_id": "t3", "name": "c++"},
-      {"_id": "t4", "name": "JavaScript"},
-      {"_id": "t5", "name": "Rust"},
-      {"_id": "t6", "name": "C#"},
-      {"_id": "t7", "name": "ASP .NET"},
-      {"_id": "t8", "name": "TypeScript"},
-      {"_id": "t9", "name": "Flutter"},
-      {"_id": "t10", "name": "React.js"},
-    ],
-    "categories": [
-      {
-        "_id": "c1",
-        "name": "Mobile Development",
-        "tagIds": ["t10", "t9", "t1"],
-      },
-      {
-        "_id": "c2",
-        "name": "Product Design",
-        "tagIds": ["t3"],
-      },
-      {
-        "_id": "c3",
-        "name": "Machine Learning",
-        "tagIds": ["t3", "t4"],
-      },
-      {
-        "_id": "c4",
-        "name": "QA & DevOps",
-        "tagIds": ["t3"],
-      },
-      {
-        "_id": "c5",
-        "name": "Web Frontend Development",
-        "tagIds": ["t3", "t1", "t10", "t4", "t8"],
-      },
-      {
-        "_id": "c6",
-        "name": "Cyber Security",
-        "tagIds": ["t3"],
-      },
-      {
-        "_id": "c7",
-        "name": "Full-Stack Development",
-        "tagIds": ["t3"],
-      },
-      {
-        "_id": "c8",
-        "name": "System & Business Analysis",
-        "tagIds": ["t3"],
-      },
-      {
-        "_id": "c9",
-        "name": "Project Management",
-        "tagIds": ["t3"],
-      },
-    ],
-  };
+class FilterSearchState {
+  final String searchQuery;
+  final String? activeCategoryId;
+  final String? activeTagId;
 
-  return FilterData(
-    tags: (mockJson['tags'] as List).map((e) => Tag.fromJson(e)).toList(),
-    categories: (mockJson['categories'] as List)
-        .map((e) => Category.fromJson(e))
-        .toList(),
-  );
-});
+  FilterSearchState({
+    this.searchQuery = "",
+    this.activeCategoryId,
+    this.activeTagId,
+  });
 
-// 2. Selection State
-class FilterState {
-  final Set<String> selectedTagIds;
-  final String? selectedCategoryId;
-  FilterState({this.selectedTagIds = const {}, this.selectedCategoryId});
-
-  FilterState copyWith({
-    Set<String>? selectedTagIds,
-    String? selectedCategoryId,
+  FilterSearchState copyWith({
+    String? searchQuery,
+    String? activeCategoryId,
+    String? activeTagId,
   }) {
-    return FilterState(
-      selectedTagIds: selectedTagIds ?? this.selectedTagIds,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+    return FilterSearchState(
+      searchQuery: searchQuery ?? this.searchQuery,
+      activeCategoryId: activeCategoryId,
+      activeTagId: activeTagId,
     );
   }
 }
 
-class FilterNotifier extends Notifier<FilterState> {
+class FilterSearchNotifier extends Notifier<FilterSearchState> {
   @override
-  FilterState build() => FilterState();
+  FilterSearchState build() => FilterSearchState();
 
-  void toggleTag(String tagId) {
-    final newTags = Set<String>.from(state.selectedTagIds);
-    if (newTags.contains(tagId)) {
-      newTags.remove(tagId);
-    } else {
-      newTags.add(tagId);
-    }
-    state = state.copyWith(selectedTagIds: newTags);
+  void setSearchTag(String tagId) {
+    state = state.copyWith(activeTagId: tagId, activeCategoryId: null);
   }
 
-  void selectCategory(String categoryId) {
-    state = state.copyWith(selectedCategoryId: categoryId);
+  void setSearchCategory(String categoryId) {
+    state = state.copyWith(activeCategoryId: categoryId, activeTagId: null);
+  }
+
+  void updateQuery(String query) {
+    state = state.copyWith(searchQuery: query);
+  }
+
+  void clearFilters() {
+    state = FilterSearchState();
   }
 }
 
-final filterSelectionProvider = NotifierProvider<FilterNotifier, FilterState>(
-  FilterNotifier.new,
-);
+final filterSearchProvider =
+    NotifierProvider<FilterSearchNotifier, FilterSearchState>(
+      FilterSearchNotifier.new,
+    );
+
+// --- THE MISSING PROVIDER (FIXES YOUR ERROR) ---
+
+// This provider takes your mock data and makes it available to the UI
+final filterDataProvider = FutureProvider<FilterData>((ref) async {
+  // Simulate a slight delay to mimic a database call
+  await Future.delayed(const Duration(milliseconds: 300));
+
+  // Return the FilterData using your imported mock lists
+  return FilterData(tags: mockTags, categories: mockCategories);
+});

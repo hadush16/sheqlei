@@ -69,77 +69,81 @@ class _HomePageState extends ConsumerState<HomePage> {
           colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
       ),
-      body: CustomRefreshIndicator(
-        onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
-        builder: (context, child, controller) {
-          _refreshController = controller;
-          return Stack(
-            children: [
-              child,
-              if (controller.value > 0)
-                Positioned(
-                  top: 180,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Opacity(
-                      opacity: controller.value.clamp(0.0, 1.0),
-                      child: const FeatherSvgLoader(size: 35),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: CustomRefreshIndicator(
+          onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
+          builder: (context, child, controller) {
+            _refreshController = controller;
+            return Stack(
+              children: [
+                child,
+                if (controller.value > 0)
+                  Positioned(
+                    top: 180,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Opacity(
+                        opacity: controller.value.clamp(0.0, 1.0),
+                        child: const FeatherSvgLoader(size: 35),
+                      ),
                     ),
                   ),
-                ),
-            ],
-          );
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            AppSliverHeader(username: widget.username),
-            const SliverToBoxAdapter(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-                color: Color(0xFFEEEEEE),
-                indent: 20,
-                endIndent: 20,
-              ),
-            ),
-            if (_refreshController != null)
-              AnimatedBuilder(
-                animation: _refreshController!,
-                builder: (context, _) => SliverToBoxAdapter(
-                  child: SizedBox(height: _refreshController!.value * 100),
-                ),
-              ),
-            jobsAsync.when(
-              skipLoadingOnReload: true,
-              loading: () => const SliverFillRemaining(
-                hasScrollBody: false,
-                // child: Center(child: FeatherSvgLoader(size: 40)),
-              ),
-              error: (err, stack) =>
-                  SliverToBoxAdapter(child: Center(child: Text("Error: $err"))),
-              data: (jobs) {
-                if (jobs.isEmpty) {
-                  return _buildEmptyState();
-                }
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildJobItem(jobs[index]),
-                    childCount: jobs.length,
-                  ),
-                );
-              },
-            ),
-            if (isFetchingMore)
+              ],
+            );
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              AppSliverHeader(username: widget.username),
               const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30),
-                  child: FeatherSvgLoader(size: 30),
+                child: Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Color(0xFFEEEEEE),
+                  indent: 20,
+                  endIndent: 20,
                 ),
               ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
+              if (_refreshController != null)
+                AnimatedBuilder(
+                  animation: _refreshController!,
+                  builder: (context, _) => SliverToBoxAdapter(
+                    child: SizedBox(height: _refreshController!.value * 100),
+                  ),
+                ),
+              jobsAsync.when(
+                skipLoadingOnReload: true,
+                loading: () => const SliverFillRemaining(
+                  hasScrollBody: false,
+                  // child: Center(child: FeatherSvgLoader(size: 40)),
+                ),
+                error: (err, stack) => SliverToBoxAdapter(
+                  child: Center(child: Text("Error: $err")),
+                ),
+                data: (jobs) {
+                  if (jobs.isEmpty) {
+                    return _buildEmptyState();
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => _buildJobItem(jobs[index]),
+                      childCount: jobs.length,
+                    ),
+                  );
+                },
+              ),
+              if (isFetchingMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: FeatherSvgLoader(size: 30),
+                  ),
+                ),
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
+          ),
         ),
       ),
     );
