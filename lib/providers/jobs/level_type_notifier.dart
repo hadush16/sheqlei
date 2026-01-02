@@ -9,6 +9,8 @@ final jobTypesProvider = FutureProvider<List<JobType>>((ref) async {
     {"_id": "ft_01", "name": "Full-time"},
     {"_id": "pt_02", "name": "Part-time"},
     {"_id": "ct_03", "name": "Contract"},
+    {"_id": "pt_04", "name": "Per diem"},
+    {"_id": "pt_05", "name": "Temporary"},
   ];
   return mockTypes.map((e) => JobType.fromJson(e)).toList();
 });

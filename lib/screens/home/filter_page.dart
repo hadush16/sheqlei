@@ -5,8 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sheqlee/models/filter_model.dart';
 import 'package:sheqlee/providers/filter_provider.dart';
+import 'package:sheqlee/providers/jobs/filtered_provider.dart';
+import 'package:sheqlee/screens/home/jobfilter_page_dropdwon.dart';
 import 'package:sheqlee/screens/home/main_shell_screen.dart';
 import 'package:sheqlee/widget/backbutton.dart';
+import 'package:sheqlee/widget/job_card.dart';
 
 class FilterScreen extends ConsumerStatefulWidget {
   const FilterScreen({super.key});
@@ -18,12 +21,18 @@ class FilterScreen extends ConsumerStatefulWidget {
 class _FilterScreenState extends ConsumerState<FilterScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
+  // 1. Add this to track if we should show the final Job List
+  bool _showResults = false;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      setState(() => _isSearching = _searchController.text.isNotEmpty);
+      setState(() {
+        _isSearching = _searchController.text.isNotEmpty;
+        // Reset results view if user clears text completely
+        if (_searchController.text.isEmpty) _showResults = false;
+      });
     });
   }
 
@@ -52,9 +61,11 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
                   _buildSearchBar(),
                   const SizedBox(height: 20),
                   Expanded(
-                    child: _isSearching
-                        ? _buildSearchSuggestions(data)
-                        : _buildDefaultView(data),
+                    child: _showResults
+                        ? _buildFilteredResultsList() // 2. Show the actual jobs
+                        : (_isSearching
+                              ? _buildSearchSuggestions(data)
+                              : _buildDefaultView(data)),
                   ),
                 ],
               ),
@@ -63,6 +74,25 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
           _buildFixedBackButton(),
         ],
       ),
+    );
+  }
+
+  Widget _buildFilteredResultsList() {
+    final jobsAsync = ref.watch(filteredJobsProvider);
+
+    return jobsAsync.when(
+      data: (jobs) => jobs.isEmpty
+          ? const Center(child: Text("No jobs found matching your criteria"))
+          : ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: jobs.length,
+              itemBuilder: (context, index) =>
+                  JobCard(job: jobs[index]), // Use your JobCard widget here
+            ),
+      loading: () => const Center(
+        //child: CircularProgressIndicator(color: Color(0xff8967B3)),
+      ),
+      error: (err, _) => Center(child: Text("Error loading jobs")),
     );
   }
 
@@ -75,6 +105,10 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
             child: TextField(
               controller: _searchController,
               cursorColor: Color(0xff8967B3),
+              onSubmitted: (value) {
+                // Trigger the search query update
+                ref.read(filterSearchProvider.notifier).updateQuery(value);
+              },
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 isDense: true,
@@ -101,17 +135,39 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
           ),
         ),
         const SizedBox(width: 8),
+        // Container(
+        //   height: 42,
+        //   width: 42,
+        //   decoration: BoxDecoration(
+        //     border: Border.all(color: Colors.black),
+        //     borderRadius: BorderRadius.circular(50),
+        //   ),
+        //   child: IconButton(
+        //     padding: EdgeInsets.zero,
+        //     icon: SvgPicture.asset('assets/icons/filter - alt2.svg', width: 20),
+        //     onPressed: () {},
+        //   ),
+        // ),
+        // Inside your _buildSearchBar() method in FilterScreen
         Container(
           height: 42,
           width: 42,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+            border: Border.all(
+              color: Colors.black12,
+            ), // Changed to light gray for better design
             borderRadius: BorderRadius.circular(50),
           ),
           child: IconButton(
             padding: EdgeInsets.zero,
             icon: SvgPicture.asset('assets/icons/filter - alt2.svg', width: 20),
-            onPressed: () {},
+            onPressed: () {
+              // This NAVIGATES to your new Filter Page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JobFilterPage()),
+              );
+            },
           ),
         ),
       ],
@@ -171,33 +227,75 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
     );
   }
 
+  // Widget _buildSearchSuggestions(FilterData data) {
+  //   final query = _searchController.text.toLowerCase();
+
+  //   // Filters categories based on typing
+  //   final suggestions = data.tags
+  //       .where((Tag) => Tag.name.toLowerCase().contains(query))
+  //       .toList();
+
+  //   return ListView.builder(
+  //     padding: EdgeInsets.zero,
+  //     itemCount: suggestions.length,
+  //     itemBuilder: (context, index) {
+  //       return ListTile(
+  //         // Design similar to the image: Icon in front of the text
+  //         leading: SvgPicture.asset(
+  //           'assets/icons/search-alt2 (1).svg',
+  //           height: 18,
+  //           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+  //         ),
+  //         title: Text(
+  //           suggestions[index].name,
+  //           style: const TextStyle(fontSize: 16, color: Colors.black87),
+  //         ),
+  //         onTap: () {
+  //           final selectedTag = suggestions[index];
+  //           _searchController.text = selectedTag.name;
+
+  //           // 1. Update the filter state
+  //           ref
+  //               .read(filterSearchProvider.notifier)
+  //               .setSearchTag(selectedTag.id);
+
+  //           // 2. Clear focus
+  //           FocusScope.of(context).unfocus();
+
+  //           // 3. Since the FilteredJobsNotifier 'watches' filterSearchProvider,
+  //           // it will automatically start loading the new list.
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+  // 4. Update the onTap logic in your suggestions
   Widget _buildSearchSuggestions(FilterData data) {
     final query = _searchController.text.toLowerCase();
-
-    // Filters categories based on typing
     final suggestions = data.tags
-        .where((Tag) => Tag.name.toLowerCase().contains(query))
+        .where((tag) => tag.name.toLowerCase().contains(query))
         .toList();
 
     return ListView.builder(
       padding: EdgeInsets.zero,
       itemCount: suggestions.length,
       itemBuilder: (context, index) {
+        final selectedTag = suggestions[index];
         return ListTile(
-          // Design similar to the image: Icon in front of the text
           leading: SvgPicture.asset(
-            'assets/icons/search-alt2 (1).svg',
+            'assets/icons/search-alt2 (2).svg',
             height: 18,
-            colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
           ),
-          title: Text(
-            suggestions[index].name,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
-          ),
+          title: Text(selectedTag.name),
           onTap: () {
-            _searchController.text = suggestions[index].name;
+            _searchController.text = selectedTag.name;
+            ref
+                .read(filterSearchProvider.notifier)
+                .setSearchTag(selectedTag.id);
             FocusScope.of(context).unfocus();
-            // Add navigation or filtering logic here
+
+            // 5. TRIGGER RESULTS VIEW
+            setState(() => _showResults = true);
           },
         );
       },

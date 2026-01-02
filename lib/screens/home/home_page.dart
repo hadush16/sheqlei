@@ -1,18 +1,13 @@
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
-import 'package:sheqlee/screens/home/filter_page.dart';
-import 'package:sheqlee/screens/home/job_details_screen.dart';
-import 'package:sheqlee/widget/app_sliver_header.dart';
-import 'package:sheqlee/widget/favotite_icon.dart';
-import 'package:sheqlee/widget/job_metadata_section.dart';
-import 'package:sheqlee/widget/job_shimmer_loading.dart';
-import 'package:sheqlee/models/job.dart';
+
 import 'package:sheqlee/providers/jobs/job_notifier.dart';
-import 'package:sheqlee/models/job_type_model.dart';
-import 'package:sheqlee/models/job_level_model.dart';
+import 'package:sheqlee/screens/home/filter_page.dart';
+import 'package:sheqlee/widget/app_sliver_header.dart';
+import 'package:sheqlee/widget/job_card.dart';
+import 'package:sheqlee/widget/job_shimmer_loading.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final String username;
@@ -33,7 +28,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _onScroll() {
-    // If we are 200 pixels from the bottom, trigger the fetch
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       ref.read(jobsProvider.notifier).fetchMoreJobs();
@@ -49,7 +43,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final jobsAsync = ref.watch(jobsProvider);
-    // final isFetchingMore = ref.watch(jobsProvider.notifier).isFetchingMore;
     final notifier = ref.watch(jobsProvider.notifier);
     final isFetchingMore = notifier.isFetchingMore;
 
@@ -70,7 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 0),
         child: CustomRefreshIndicator(
           onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
           builder: (context, child, controller) {
@@ -126,9 +119,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                   if (jobs.isEmpty) {
                     return _buildEmptyState();
                   }
+
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildJobItem(jobs[index]),
+                      (context, index) => JobCard(
+                        job: jobs[index],
+                      ), // Use the reusable widget here
                       childCount: jobs.length,
                     ),
                   );
@@ -149,88 +145,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildJobItem(Job job) {
-    final allTypes = ref.watch(jobTypesProvider).value ?? [];
-    final allLevels = ref.watch(jobLevelsProvider).value ?? [];
-
-    // 2. RESOLVE the IDs to full names
-    // We search the list for a match; if not found, we show nothing
-    final String typeName = allTypes
-        .firstWhere(
-          (t) => t.id == job.typeId,
-          orElse: () => JobType(id: '', name: ''),
-        )
-        .name;
-
-    final String levelName = allLevels
-        .firstWhere(
-          (l) => l.id == job.levelId,
-          orElse: () => JobLevel(id: '', name: ''),
-        )
-        .name;
-
-    // 3. Prepare the display list (Only including non-empty strings)
-    final List<String> displayTags = [
-      if (typeName.isNotEmpty) typeName,
-      if (levelName.isNotEmpty) levelName,
-      if (job.salary.isNotEmpty) job.salary,
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => JobDetailsScreen(job: job)),
-          );
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Time and Company (Optional info)
-            Text(
-              "${job.time} ",
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
-            ),
-            const SizedBox(height: 4),
-
-            // 2. Job Title
-            Text(
-              job.title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 6),
-
-            // 3. Short Description
-            Text(
-              job.shortDescription,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
-            ),
-            const SizedBox(height: 12),
-
-            // 4. THE ROW: Dynamic Tags (Type, Level, Salary) + Favorite Icon
-            // This is now positioned BELOW the description as requested
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: JobMetadataSection(job: job, showRocketIcon: false),
-                ),
-                FavoriteButton(jobId: job.id),
-              ],
-            ),
-            const SizedBox(height: 12),
-            const Divider(),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildEmptyState() {
     return SliverFillRemaining(
       hasScrollBody: false,
@@ -243,16 +157,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               width: 120,
               height: 120,
               colorFilter: ColorFilter.mode(
-                Colors.purple.withOpacity(0.3),
+                Color(0xff8967B3).withOpacity(0.3),
                 BlendMode.srcIn,
               ),
             ),
             const SizedBox(height: 20),
             const Text(
-              "No job posts found.",
+              "No job posts, \n please try again later",
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey,
+                color: Color(0xff000000),
                 fontWeight: FontWeight.w500,
               ),
             ),

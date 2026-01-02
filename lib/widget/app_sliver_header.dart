@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sheqlee/screens/profile/edit_profile.dart';
 
 class AppSliverHeader extends StatelessWidget {
   final String username;
@@ -28,17 +29,18 @@ class AppSliverHeader extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 0),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Row(
                   children: [
                     Transform.scale(
                       scale: 0.9 - (0.1 * t),
                       child: CircleAvatar(
-                        radius: size.width * 0.11,
+                        radius: size.width * 0.071,
                         backgroundColor: Colors.black,
                         child: SvgPicture.asset(
                           'assets/icons/settings - alt2 (1).svg',
-                          width: 40,
+                          width: 20,
+                          height: 20,
                           color: Colors.white,
                         ),
                       ),
@@ -52,16 +54,28 @@ class AppSliverHeader extends StatelessWidget {
                           "Welcome, $username",
                           style: TextStyle(
                             fontSize: lerpDouble(size.width * 0.045, 16, t),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'pretendard',
                           ),
                         ),
                         if (t < 0.5) // Only show when expanded
-                          Text(
-                            "Edit profile",
-                            style: TextStyle(
-                              color: const Color(0xffa06cd5),
-                              fontSize: 12,
+                          TextButton(
+                            child: Text(
+                              "Edit profile",
+                              style: TextStyle(
+                                color: const Color(0xffa06cd5),
+                                fontSize: 12,
+                                fontFamily: 'pretendard',
+                              ),
                             ),
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfilePage(),
+                                ),
+                              );
+                            },
                           ),
                       ],
                     ),
