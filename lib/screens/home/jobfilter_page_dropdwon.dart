@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/providers/category/category_provider.dart';
 import 'package:sheqlee/providers/category/job_filter_logic_provider.dart';
 import 'package:sheqlee/providers/jobs/level_type_notifier.dart'; // Meta data
-import 'package:sheqlee/widget/backbutton.dart';
-import 'package:sheqlee/widget/job_card.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
+import 'package:sheqlee/widget/home/job_card.dart';
 
 class JobFilterPage extends ConsumerStatefulWidget {
   const JobFilterPage({super.key});

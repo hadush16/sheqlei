@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sheqlee/login.dart';
+import 'package:sheqlee/widget/login/login.dart';
 
 import 'package:sheqlee/providers/auth/send_code_provider.dart';
 import 'package:flutter/services.dart';
-import 'package:sheqlee/widget/app_primary_button.dart';
-import 'package:sheqlee/widget/apptextformfield.dart';
-import 'package:sheqlee/widget/backbutton.dart';
+import 'package:sheqlee/widget/login/app_primary_button.dart';
+import 'package:sheqlee/widget/login/apptextformfield.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sheqlee/providers/auth/reset_password_provider.dart';
 import 'package:sheqlee/utils/validator.dart';
-import 'package:sheqlee/widget/autherrorIndicator.dart';
+import 'package:sheqlee/widget/login/autherrorIndicator.dart';
 
 class PasswordReset extends ConsumerStatefulWidget {
   const PasswordReset({super.key});

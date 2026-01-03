@@ -8,8 +8,8 @@ import 'package:sheqlee/providers/filter_provider.dart';
 import 'package:sheqlee/providers/jobs/filtered_provider.dart';
 import 'package:sheqlee/screens/home/jobfilter_page_dropdwon.dart';
 import 'package:sheqlee/screens/home/main_shell_screen.dart';
-import 'package:sheqlee/widget/backbutton.dart';
-import 'package:sheqlee/widget/job_card.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
+import 'package:sheqlee/widget/home/job_card.dart';
 
 class FilterScreen extends ConsumerStatefulWidget {
   const FilterScreen({super.key});
@@ -53,8 +53,9 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 150, left: 25, right: 25),
             child: filterAsync.when(
-              loading:
-                  () {}, //=> const Center(child: CircularProgressIndicator()),
+              loading: () {
+                return null;
+              }, //=> const Center(child: CircularProgressIndicator()),
               error: (err, _) => Center(child: Text('Error: $err')),
               data: (data) => Column(
                 children: [
@@ -308,9 +309,7 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
       left: 25,
       child: GestureDetector(
         onTap: () => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const MainShellScreen(username: 'username'),
-          ),
+          MaterialPageRoute(builder: (context) => const MainShellScreen()),
         ),
         child: const AppBackButton(),
       ),

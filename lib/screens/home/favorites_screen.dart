@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sheqlee/providers/jobs/favorites_provider.dart';
 import 'package:sheqlee/screens/home/job_details_screen.dart';
-import 'package:sheqlee/widget/favotite_icon.dart'; // Ensure correct path
-import 'package:sheqlee/widget/job_metadata_section.dart';
+import 'package:sheqlee/screens/home/main_shell_screen.dart';
+import 'package:sheqlee/widget/home/favotite_icon.dart'; // Ensure correct path
+import 'package:sheqlee/widget/home/job_metadata_section.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
@@ -18,13 +20,18 @@ class FavoritesScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-            size: 20,
-          ),
-          onPressed: () => Navigator.pop(context),
+        leading: AppBackButton(
+          onTap: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              // Safety fallback: Goes to your shell instead of a black screen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainShellScreen()),
+              );
+            }
+          },
         ),
         title: const Text(
           "My Favorites",

@@ -164,10 +164,22 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(skills: [...state.skills, skill]);
   }
 
-  void removeSkill(String tagId) {
-    state = state.copyWith(
-      skills: state.skills.where((skill) => skill.tagId != tagId).toList(),
-    );
+  // void removeSkill(String tagId) {
+  //   state = state.copyWith(
+  //     skills: state.skills.where((skill) => skill.tagId != tagId).toList(),
+  //   );
+  // }
+  // Inside your ProfileNotifier class
+  void removeSkill(dynamic skillToRemove) {
+    // 1. Create a new list that excludes the skill you want to remove
+    // We compare by tagName (e.g., "Java") to find the match
+    final updatedSkills = state.skills
+        .where((s) => s.tagName != skillToRemove.tagName)
+        .toList();
+
+    // 2. Update the state by creating a copy with the new skills list
+    // This assumes you have a 'copyWith' method in your ProfileState class
+    state = state.copyWith(skills: updatedSkills);
   }
 
   void addLink(String platform, String url) {

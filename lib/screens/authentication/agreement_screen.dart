@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sheqlee/providers/auth/agreement_provider.dart';
 import 'package:sheqlee/screens/authentication/sign_up.dart';
-import 'package:sheqlee/widget/app_primary_button.dart';
-import 'package:sheqlee/widget/backbutton.dart';
-import 'package:sheqlee/widget/urllauncher.dart';
-import 'package:sheqlee/widget/agreement_tile.dart';
+import 'package:sheqlee/widget/login/app_primary_button.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
+import 'package:sheqlee/widget/login/urllauncher.dart';
+import 'package:sheqlee/widget/login/agreement_tile.dart';
 
 class AgreementScreen extends ConsumerWidget {
   const AgreementScreen({super.key});

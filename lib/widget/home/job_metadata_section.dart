@@ -49,7 +49,7 @@ class JobMetadataSection extends ConsumerWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (showRocketIcon) _buildIconTag(),
-        ...metadata.map((text) => _buildTextChip(text)).toList(),
+        ...metadata.map((text) => _buildTextChip(text)),
       ],
     );
   }

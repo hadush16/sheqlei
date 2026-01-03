@@ -82,7 +82,7 @@ class JobApi {
     if (tagId != null && tagId.isNotEmpty) {
       allJobs = allJobs.where((job) {
         // This looks inside the job's tags list for the specific ID from mockTags
-        return job.tagIds != null && job.tagIds!.contains(tagId);
+        return job.tagIds.contains(tagId);
       }).toList();
     }
 
@@ -94,8 +94,7 @@ class JobApi {
 
         allJobs = allJobs.where((job) {
           // Keep the job if it has ANY tag that belongs to this category
-          return job.tagIds != null &&
-              job.tagIds!.any((t) => category.tagIds.contains(t));
+          return job.tagIds.any((t) => category.tagIds.contains(t));
         }).toList();
       } catch (e) {
         // Category not found in mock data

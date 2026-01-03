@@ -5,8 +5,8 @@ import 'package:sheqlee/models/job_level_model.dart';
 import 'package:sheqlee/models/job_type_model.dart';
 import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
 import 'package:sheqlee/screens/home/job_details_screen.dart';
-import 'package:sheqlee/widget/favotite_icon.dart';
-import 'package:sheqlee/widget/job_metadata_section.dart';
+import 'package:sheqlee/widget/home/favotite_icon.dart';
+import 'package:sheqlee/widget/home/job_metadata_section.dart';
 
 class JobCard extends ConsumerWidget {
   final Job job;

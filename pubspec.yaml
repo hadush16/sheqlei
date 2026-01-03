@@ -17,6 +17,7 @@ dependencies:
   custom_refresh_indicator: ^4.0.1
   file_picker: ^10.3.8
   dio: ^5.9.0
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

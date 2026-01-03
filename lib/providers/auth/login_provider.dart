@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sheqlee/models/user_model.dart';
+import 'package:sheqlee/providers/user/user_provider.dart';
 
 class LoginState {
   final String email;
@@ -36,7 +38,8 @@ class LoginState {
 /// NOTIFIER (LOGIC ONLY)
 /// =======================
 class LoginNotifier extends StateNotifier<LoginState> {
-  LoginNotifier() : super(const LoginState());
+  final Ref ref;
+  LoginNotifier(this.ref) : super(const LoginState());
 
   void setEmail(String value) {
     state = state.copyWith(email: value, error: null);
@@ -63,7 +66,20 @@ class LoginNotifier extends StateNotifier<LoginState> {
       await Future.delayed(const Duration(seconds: 2));
 
       // For demonstration: simulate a credential check
-      if (currentEmail == "hadush@gmail.com" && currentPassword == "12345678") {
+
+      if (currentEmail == "h@gmail.com" && currentPassword == "1234") {
+        // 2. CREATE USER FROM API RESPONSE
+        // In a real app, this data comes from your JSON response
+        final loggedInUser = UserModel(
+          id: "unique_id_123",
+          username: "h", // This is the username you want everywhere
+          email: currentEmail,
+        );
+
+        // 3. PUSH TO GLOBAL PROVIDER
+        // This is the "Magic Link" that makes the username available globally
+        ref.read(userProvider.notifier).setUser(loggedInUser);
+
         return true;
       } else {
         state = state.copyWith(
@@ -80,6 +96,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
   }
 }
 
+// final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>(
+//   (ref) => LoginNotifier(ref),
+// );
 final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>(
-  (ref) => LoginNotifier(),
+  (ref) => LoginNotifier(ref),
 );

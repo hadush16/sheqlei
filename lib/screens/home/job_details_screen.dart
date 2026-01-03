@@ -385,9 +385,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sheqlee/providers/jobs/tags_notifier.dart';
-import 'package:sheqlee/widget/backbutton.dart';
-import 'package:sheqlee/widget/favotite_icon.dart';
-import 'package:sheqlee/widget/job_metadata_section.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
+import 'package:sheqlee/widget/home/favotite_icon.dart';
+import 'package:sheqlee/widget/home/job_metadata_section.dart';
 import '../../models/job.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
@@ -696,7 +696,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           runSpacing: 5,
           children: [
             _buildIconTag(),
-            ...tags.map((tag) => _buildTextTag(tag.name)).toList(),
+            ...tags.map((tag) => _buildTextTag(tag.name)),
           ],
         ),
       ),

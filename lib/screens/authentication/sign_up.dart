@@ -6,10 +6,10 @@ import 'package:sheqlee/models/signup_request.dart';
 import 'package:sheqlee/screens/home/main_shell_screen.dart';
 import 'package:sheqlee/service/auth_service.dart';
 import 'package:sheqlee/utils/validator.dart';
-import 'package:sheqlee/widget/app_primary_button.dart';
-import 'package:sheqlee/widget/apptextformfield.dart';
-import 'package:sheqlee/widget/autherrorIndicator.dart';
-import 'package:sheqlee/widget/backbutton.dart';
+import 'package:sheqlee/widget/login/app_primary_button.dart';
+import 'package:sheqlee/widget/login/apptextformfield.dart';
+import 'package:sheqlee/widget/login/autherrorIndicator.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -173,9 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (_) => MainShellScreen(username: widget.Name),
-        ),
+        MaterialPageRoute(builder: (_) => MainShellScreen()),
       );
     } catch (e) {
       ScaffoldMessenger.of(

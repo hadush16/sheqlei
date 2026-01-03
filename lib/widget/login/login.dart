@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 import 'package:sheqlee/screens/authentication/login_form.dart';
 import 'package:sheqlee/screens/authentication/agreement_screen.dart';
-import 'package:sheqlee/widget/app_primary_button.dart';
+import 'package:sheqlee/widget/login/app_primary_button.dart';
 
 class IntroLoginScreen extends StatefulWidget {
   const IntroLoginScreen({super.key});

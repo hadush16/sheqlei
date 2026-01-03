@@ -6,9 +6,11 @@ import 'package:sheqlee/screens/authentication/send_code.dart';
 //import 'package:sheqlee/screens/home/home_page.dart';
 import 'package:sheqlee/screens/home/main_shell_screen.dart';
 import 'package:sheqlee/utils/validator.dart';
-import 'package:sheqlee/widget/app_primary_button.dart';
-import 'package:sheqlee/widget/apptextformfield.dart';
-import 'package:sheqlee/widget/AuthErrorIndicator.dart';
+import 'package:sheqlee/widget/login/app_primary_button.dart';
+import 'package:sheqlee/widget/login/apptextformfield.dart';
+import 'package:sheqlee/widget/login/AuthErrorIndicator.dart';
+import 'package:sheqlee/widget/login/backbutton.dart';
+import 'package:sheqlee/widget/login/login.dart';
 
 class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({super.key});
@@ -44,9 +46,7 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => MainShellScreen(username: displayName),
-          ),
+          MaterialPageRoute(builder: (context) => MainShellScreen()),
         );
       }
     } else {
@@ -95,23 +95,26 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    // BACK BUTTON: Removing all internal padding for perfect alignment
-                    Transform.translate(
-                      offset: const Offset(
-                        -18,
-                        0,
-                      ), // Moves icon left to align visually with text
-                      child: IconButton(
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
+
+                    AppBackButton(
+                      onTap: () {
+                        // 1. Close the keyboard
+                        FocusScope.of(context).unfocus();
+
+                        // 2. Check if there is a page to go back to
+                        if (Navigator.canPop(context)) {
                           Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icons/arrow-down-sign-to-navigate.svg',
-                          width: 11,
-                          height: 20,
-                        ),
-                      ),
+                        } else {
+                          // 3. Fallback: If history is empty, go to Home instead of showing a black screen
+                          // Replace 'BottomNavScreen' with whatever your main screen class is named
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const IntroLoginScreen(),
+                            ),
+                          );
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 5,

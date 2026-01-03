@@ -23,11 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const AppStartScreen(),
-      // initialRoute: "/splash",
-      // routes: {
-      //   "/splash": (context) => AppStartScreen(),
-      //   "/login": (context) => IntroLoginScreen(),
-      // },
+
       debugShowCheckedModeBanner: false,
     );
   }

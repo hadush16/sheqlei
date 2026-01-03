@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sheqlee/login.dart';
+import 'package:sheqlee/widget/login/login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppStartScreen extends StatefulWidget {

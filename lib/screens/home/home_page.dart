@@ -4,10 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:sheqlee/providers/jobs/job_notifier.dart';
+import 'package:sheqlee/screens/home/favorites_screen.dart';
 import 'package:sheqlee/screens/home/filter_page.dart';
-import 'package:sheqlee/widget/app_sliver_header.dart';
-import 'package:sheqlee/widget/job_card.dart';
-import 'package:sheqlee/widget/job_shimmer_loading.dart';
+import 'package:sheqlee/widget/home/app_bottom_nav.dart';
+import 'package:sheqlee/widget/home/app_sliver_header.dart';
+import 'package:sheqlee/widget/home/job_card.dart';
+import 'package:sheqlee/widget/home/job_shimmer_loading.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final String username;
@@ -46,23 +48,24 @@ class _HomePageState extends ConsumerState<HomePage> {
     final notifier = ref.watch(jobsProvider.notifier);
     final isFetchingMore = notifier.isFetchingMore;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xff8967B3),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const FilterScreen()),
-          );
-        },
-        child: SvgPicture.asset(
-          'assets/icons/search-alt2.svg',
-          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-        ),
-      ),
-      body: Padding(
+    return Material(
+      color: Colors.white,
+
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: const Color(0xff8967B3),
+      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const FilterScreen()),
+      //     );
+      //   },
+      //   child: SvgPicture.asset(
+      //     'assets/icons/search-alt2.svg',
+      //     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+      //   ),
+      // ),
+      child: Padding(
         padding: const EdgeInsets.only(top: 0),
         child: CustomRefreshIndicator(
           onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
