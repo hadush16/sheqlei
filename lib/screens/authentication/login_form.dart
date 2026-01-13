@@ -28,27 +28,28 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
 
   void _handleLogin() async {
     // Clear error before starting
-    setState(() => _generalError = null);
+    //setState(() => _generalError = null);
 
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
     // 1. Local check: if empty, show "Incorrect credentials" immediately
     if (email.isEmpty || password.isEmpty) {
-      setState(() => _generalError = "Incorrect credentials");
+      //setState(() => _generalError = "Incorrect credentials");
+      ref.read(loginProvider.notifier).state = ref
+          .read(loginProvider)
+          .copyWith(error: "Incorrect credentials");
       return;
     }
     // 2. Perform Login
     final success = await ref.read(loginProvider.notifier).login();
-    if (success) {
-      final String displayName = email.split('@')[0];
+    if (success && mounted) {
       // Navigate to Home on success
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainShellScreen()),
-        );
-      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainShellScreen()),
+      );
     } else {
       if (mounted) {
         setState(() {
@@ -160,8 +161,8 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
                                   constraints: const BoxConstraints(),
                                   icon: SvgPicture.asset(
                                     'assets/icons/cancel - alt2.svg',
-                                    width: 15,
-                                    height: 15,
+                                    width: 17,
+                                    height: 17,
                                   ),
                                   onPressed: () {
                                     _emailController.clear();

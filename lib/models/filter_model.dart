@@ -1,26 +1,29 @@
-class Tag {
-  final String id;
-  final String name;
+import 'package:sheqlee/models/category_model.dart';
+import 'package:sheqlee/models/tag_model.dart';
 
-  Tag({required this.id, required this.name});
+// class Tag {
+//   final String id;
+//   final String name;
 
-  factory Tag.fromJson(Map<String, dynamic> json) =>
-      Tag(id: json['_id'] ?? json['id'] ?? '', name: json['name'] ?? '');
-}
+//   Tag({required this.id, required this.name});
 
-class Category {
-  final String id;
-  final String name;
-  final List<String> tagIds; // Relates categories to tags
+//   factory Tag.fromJson(Map<String, dynamic> json) =>
+//       Tag(id: json['_id'] ?? json['id'] ?? '', name: json['name'] ?? '');
+// }
 
-  Category({required this.id, required this.name, required this.tagIds});
+// class Category {
+//   final String id;
+//   final String name;
+//   final List<String> tagIds; // Relates categories to tags
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: json['_id'] ?? json['id'] ?? '',
-    name: json['name'] ?? '',
-    tagIds: List<String>.from(json['tagIds'] ?? []),
-  );
-}
+//   Category({required this.id, required this.name, required this.tagIds});
+
+//   factory Category.fromJson(Map<String, dynamic> json) => Category(
+//     id: json['_id'] ?? json['id'] ?? '',
+//     name: json['name'] ?? '',
+//     tagIds: List<String>.from(json['tagIds'] ?? []),
+//   );
+// }
 
 class FilterData {
   final List<Tag> tags;

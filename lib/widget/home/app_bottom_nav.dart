@@ -1,56 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sheqlee/providers/bottomnavigation/navigation_provider.dart';
 
-class AppBottomNavBar extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTap;
-
-  const AppBottomNavBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+class AppBottomNavBar extends ConsumerWidget {
+  const AppBottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const activeColor = Color(0xffa06cd5);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(navigationIndexProvider);
 
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        ref.read(navigationIndexProvider.notifier).state = index;
+      },
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: activeColor,
-      unselectedItemColor: Colors.black87,
-      selectedLabelStyle: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 12,
-      ),
-      unselectedLabelStyle: const TextStyle(fontSize: 12),
+      selectedItemColor: const Color(0xff8967B3),
+      unselectedItemColor: Colors.grey,
       items: [
-        _buildItem('home - solid.svg', 'Home', 0),
-        _buildItem('activity - outline.svg', 'Dashboard', 1),
-        _buildItem('heart - outline.svg', 'Favorites', 2),
-        _buildItem('user - outline.svg', 'Account', 3),
-      ],
-    );
-  }
-
-  BottomNavigationBarItem _buildItem(String iconName, String label, int index) {
-    final bool selected = currentIndex == index;
-    return BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: SvgPicture.asset(
-          'assets/icons/$iconName',
-          color: selected ? const Color(0xffa06cd5) : Colors.black,
-          // Dynamically change the color of the SVG based on active state
-          // colorFilter: ColorFilter.mode(
-          //   isActive ? const Color(0xffa06cd5) : Color(0x00000000),
-          //   BlendMode.srcIn,
-          // ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/icons/home - outline.svg'),
+          activeIcon: SvgPicture.asset('assets/icons/home - solid.svg'),
+          label: "Home",
         ),
-      ),
-      label: label,
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/icons/activity - outline.svg'),
+          activeIcon: SvgPicture.asset('assets/icons/activity - solid.svg'),
+          label: "Dashboard",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/icons/heart - outline.svg'),
+          activeIcon: SvgPicture.asset('assets/icons/heart - solid (2).svg'),
+          label: "Favorites",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/icons/user - outline.svg'),
+          activeIcon: SvgPicture.asset('assets/icons/user - solid.svg'),
+          label: "Account",
+        ),
+      ],
     );
   }
 }

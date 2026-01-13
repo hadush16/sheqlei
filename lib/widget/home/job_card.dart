@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/models/job.dart';
-import 'package:sheqlee/models/job_level_model.dart';
-import 'package:sheqlee/models/job_type_model.dart';
-import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
+//import 'package:sheqlee/models/job_level_model.dart';
+//import 'package:sheqlee/models/job_type_model.dart';
+//import 'package:sheqlee/providers/jobs/level_type_notifier.dart';
 import 'package:sheqlee/screens/home/job_details_screen.dart';
 import 'package:sheqlee/widget/home/favotite_icon.dart';
 import 'package:sheqlee/widget/home/job_metadata_section.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class JobCard extends ConsumerWidget {
   final Job job;
@@ -15,24 +16,6 @@ class JobCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1. Resolve metadata names (watching providers)
-    final allTypes = ref.watch(jobTypesProvider).value ?? [];
-    final allLevels = ref.watch(jobLevelsProvider).value ?? [];
-
-    final String typeName = allTypes
-        .firstWhere(
-          (t) => t.id == job.typeId,
-          orElse: () => JobType(id: '', name: ''),
-        )
-        .name;
-
-    final String levelName = allLevels
-        .firstWhere(
-          (l) => l.id == job.levelId,
-          orElse: () => JobLevel(id: '', name: ''),
-        )
-        .name;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: InkWell(
@@ -48,7 +31,8 @@ class JobCard extends ConsumerWidget {
           children: [
             // 1. Time
             Text(
-              job.time,
+              //job.timeAgo,
+              timeago.format(job.createdAt),
               style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
             const SizedBox(height: 4),
@@ -76,15 +60,27 @@ class JobCard extends ConsumerWidget {
             const SizedBox(height: 8),
 
             // 3. Short Description
+            // 3. Short Description (The snippet)
+            // Text(
+            //   job.shortDescription,
+            //   //maxLines: ,
+            //   overflow: TextOverflow.visible,
+            //   style: const TextStyle(
+            //     fontSize: 14,
+            //     color: Color(0xff000000),
+            //     fontFamily: 'pretendard',
+            //     fontWeight: FontWeight.normal,
+            //   ),
+            // ),
+            // Inside your JobCard build method
             Text(
-              job.shortDescription,
-              //maxLines: ,
-              overflow: TextOverflow.visible,
+              job.shortDescription, // Ensure this says shortDescription, NOT description
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 14,
-                color: Color(0xff000000),
+                color: Colors.black,
                 fontFamily: 'pretendard',
-                fontWeight: FontWeight.normal,
               ),
             ),
             const SizedBox(height: 12),

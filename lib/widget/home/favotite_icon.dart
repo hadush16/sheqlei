@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/providers/jobs/favorites_provider.dart';
+import 'package:sheqlee/widget/home/custom_snack_bar.dart';
 
 class FavoriteButton extends ConsumerWidget {
   final String jobId;
@@ -15,17 +16,25 @@ class FavoriteButton extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        // Toggle the favorite state in the provider
-        ref.read(favoritesProvider.notifier).toggleFavorite(jobId);
+        // 1. Capture the notifier while the widget is still active
+        final favNotifier = ref.read(favoritesProvider.notifier);
+
+        // 2. Check if we are about to remove it
+        final wasFavorite = isFavorite;
+
+        // 3. Perform the toggle (this will trigger the widget's disposal in the list)
+        favNotifier.toggleFavorite(jobId);
+
+        // 4. Show the SnackBar using the stable notifier reference
+        if (wasFavorite) {
+          showRemovedSnackBar(context, favNotifier, jobId);
+        }
       },
       child: SvgPicture.asset(
         isFavorite
             ? 'assets/icons/heart - solid (1).svg'
             : 'assets/icons/heart - solid.svg', // Ensure you have an outline version
-        // colorFilter: ColorFilter.mode(
-        //   isFavorite ? const Color(0xffa06cd5) : Colors.grey,
-        //   BlendMode.srcIn,
-        // ),
+
         width: 22,
       ),
     );

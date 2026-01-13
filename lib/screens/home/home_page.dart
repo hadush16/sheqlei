@@ -1,13 +1,15 @@
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
 
 import 'package:sheqlee/providers/jobs/job_notifier.dart';
-import 'package:sheqlee/screens/home/favorites_screen.dart';
-import 'package:sheqlee/screens/home/filter_page.dart';
-import 'package:sheqlee/widget/home/app_bottom_nav.dart';
+import 'package:sheqlee/providers/user/user_provider.dart';
+import 'package:sheqlee/screens/fitter/filter_page.dart';
+import 'package:sheqlee/screens/profile/app_drawer.dart';
+import 'package:sheqlee/widget/home/app_fab.dart';
 import 'package:sheqlee/widget/home/app_sliver_header.dart';
+import 'package:sheqlee/widget/home/empty_job_widget.dart';
 import 'package:sheqlee/widget/home/job_card.dart';
 import 'package:sheqlee/widget/home/job_shimmer_loading.dart';
 
@@ -22,6 +24,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
   IndicatorController? _refreshController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -47,133 +50,136 @@ class _HomePageState extends ConsumerState<HomePage> {
     final jobsAsync = ref.watch(jobsProvider);
     final notifier = ref.watch(jobsProvider.notifier);
     final isFetchingMore = notifier.isFetchingMore;
+    final userAsync = ref.watch(userProvider);
 
-    return Material(
-      color: Colors.white,
+    // 2. EXTRACT USERNAME SAFELY
+    final String currentUsername = userAsync.when(
+      data: (user) => user?.name ?? "Muruts Yifter",
+      loading: () => "Loading...",
+      error: (_, __) => "Error",
+    );
+    final bool showFab = jobsAsync.maybeWhen(
+      data: (jobs) => jobs.isNotEmpty,
+      orElse: () => false,
+    );
 
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: const Color(0xff8967B3),
-      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const FilterScreen()),
-      //     );
-      //   },
-      //   child: SvgPicture.asset(
-      //     'assets/icons/search-alt2.svg',
-      //     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-      //   ),
-      // ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 0),
-        child: CustomRefreshIndicator(
-          onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
-          builder: (context, child, controller) {
-            _refreshController = controller;
-            return Stack(
-              children: [
-                child,
-                if (controller.value > 0)
-                  Positioned(
-                    top: 180,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Opacity(
-                        opacity: controller.value.clamp(0.0, 1.0),
-                        child: const FeatherSvgLoader(size: 35),
-                      ),
-                    ),
-                  ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        // We use Scaffold.of(context) inside this Builder
+        // If your drawer is on the left, use openDrawer()
+        // If your drawer is on the right, use openEndDrawer()
+        Scaffold.of(context).openDrawer();
+      },
+      child: Scaffold(
+        key: _scaffoldKey, // 2. ASSIGN THE KEY
+        backgroundColor: Colors.white,
+        drawer: const AppDrawer(),
+        //drawer: const AppDrawer(),
+        floatingActionButton: AppFloatingActionButton(
+          isVisible: showFab,
+          heroTag: "home_fab",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FilterScreen()),
             );
           },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              AppSliverHeader(username: widget.username),
-              const SliverToBoxAdapter(
-                child: Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Color(0xFFEEEEEE),
-                  indent: 20,
-                  endIndent: 20,
-                ),
-              ),
-              if (_refreshController != null)
-                AnimatedBuilder(
-                  animation: _refreshController!,
-                  builder: (context, _) => SliverToBoxAdapter(
-                    child: SizedBox(height: _refreshController!.value * 100),
-                  ),
-                ),
-              jobsAsync.when(
-                skipLoadingOnReload: true,
-                loading: () => const SliverFillRemaining(
-                  hasScrollBody: false,
-                  // child: Center(child: FeatherSvgLoader(size: 40)),
-                ),
-                error: (err, stack) => SliverToBoxAdapter(
-                  child: Center(child: Text("Error: $err")),
-                ),
-                data: (jobs) {
-                  if (jobs.isEmpty) {
-                    return _buildEmptyState();
-                  }
-
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => JobCard(
-                        job: jobs[index],
-                      ), // Use the reusable widget here
-                      childCount: jobs.length,
-                    ),
-                  );
-                },
-              ),
-              if (isFetchingMore)
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: FeatherSvgLoader(size: 30),
-                  ),
-                ),
-              const SliverToBoxAdapter(child: SizedBox(height: 100)),
-            ],
-          ),
         ),
-      ),
-    );
-  }
+        body: Padding(
+          padding: const EdgeInsets.only(top: 0),
+          child: CustomRefreshIndicator(
+            onRefresh: () => ref.read(jobsProvider.notifier).refreshJobs(),
+            builder: (context, child, controller) {
+              _refreshController = controller;
+              return Stack(
+                children: [
+                  child,
+                  if (controller.value > 0)
+                    Positioned(
+                      top: 180,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Opacity(
+                          opacity: controller.value.clamp(0.0, 1.0),
+                          child: const FeatherSvgLoader(size: 35),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                AppSliverHeader(scaffoldKey: _scaffoldKey),
+                const SliverToBoxAdapter(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Color(0xFFEEEEEE),
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                ),
+                if (_refreshController != null)
+                  AnimatedBuilder(
+                    animation: _refreshController!,
+                    builder: (context, _) => SliverToBoxAdapter(
+                      child: SizedBox(height: _refreshController!.value * 100),
+                    ),
+                  ),
+                jobsAsync.when(
+                  skipLoadingOnReload: true,
+                  loading: () => const SliverFillRemaining(
+                    hasScrollBody: true,
+                    //child: Center(child: JobShimmerLoading()),
+                    // child: Center(child: FeatherSvgLoader(size: 40)),
+                  ),
+                  // error: (err, stack) => SliverToBoxAdapter(
+                  //   child: Center(child: Text("Error: $err")),
+                  // ),
+                  error: (err, stack) => SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const EmptyStateWidget(), // Reusing your empty widget
+                        const SizedBox(height: 10),
+                        const Text("Slow connection detected."),
+                      ],
+                    ),
+                  ),
+                  data: (jobs) {
+                    // FIX: If jobs are empty, return the EmptyStateWidget inside a Sliver
+                    if (jobs.isEmpty) {
+                      return const SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: EmptyStateWidget(),
+                      );
+                    }
 
-  Widget _buildEmptyState() {
-    return SliverFillRemaining(
-      hasScrollBody: false,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'assets/icons/sad.svg',
-              width: 120,
-              height: 120,
-              colorFilter: ColorFilter.mode(
-                Color(0xff8967B3).withOpacity(0.3),
-                BlendMode.srcIn,
-              ),
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => JobCard(
+                          job: jobs[index],
+                        ), // Use the reusable widget here
+                        childCount: jobs.length,
+                      ),
+                    );
+                  },
+                ),
+                if (isFetchingMore)
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 30),
+                      child: FeatherSvgLoader(size: 30),
+                    ),
+                  ),
+                const SliverToBoxAdapter(child: SizedBox(height: 100)),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              "No job posts, \n please try again later",
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff000000),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

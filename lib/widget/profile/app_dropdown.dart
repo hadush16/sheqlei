@@ -10,6 +10,7 @@ class AppDropdown<T> extends StatelessWidget {
   final Function(T?) onChanged;
   final VoidCallback? onTap;
   final bool isOpen;
+  final Color? hintColor;
 
   const AppDropdown({
     super.key,
@@ -20,6 +21,7 @@ class AppDropdown<T> extends StatelessWidget {
     required this.isOpen,
     this.value,
     this.onTap,
+    this.hintColor,
   });
 
   @override
@@ -29,19 +31,27 @@ class AppDropdown<T> extends StatelessWidget {
         isExpanded: true,
         hint: Text(
           hint,
-          style: const TextStyle(
-            color: Color(0xffA0A0A0),
+          style: TextStyle(
+            color:
+                hintColor ??
+                const Color(0xffA0A0A0), // Uses black if passed, else grey
             fontSize: 18,
             fontFamily: 'pretendard',
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.normal,
           ),
         ),
+
         items: items.map((T item) {
           return DropdownMenuItem<T>(
             value: item,
             child: Text(
               itemLabel(item),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontFamily: 'pretendard',
+                fontWeight: FontWeight.normal,
+              ),
             ),
           );
         }).toList(),
@@ -54,11 +64,14 @@ class AppDropdown<T> extends StatelessWidget {
         },
         // --- DESIGN MATCH ---
         buttonStyleData: ButtonStyleData(
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(70),
-            border: Border.all(color: const Color(0xffD0D0D0)),
+            borderRadius: isOpen
+                ? const BorderRadius.vertical(top: Radius.circular(15))
+                : BorderRadius.circular(70),
+            //BorderRadius.circular(70),
+            border: Border.all(color: Colors.black, width: 1.2),
             color: const Color(0xffF5F5F5),
           ),
         ),
@@ -74,14 +87,30 @@ class AppDropdown<T> extends StatelessWidget {
           ),
         ),
         dropdownStyleData: DropdownStyleData(
-          maxHeight: 400,
+          maxHeight: 250,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(12),
+            ),
             color: Colors.white,
+            border: Border.all(
+              color: const Color.fromARGB(255, 61, 61, 61),
+              width: 1.2,
+            ),
           ),
           // THIS FORCES THE DROPDOWN BELOW THE FIELD
-          offset: const Offset(0, 1),
+          offset: const Offset(0, 0),
           elevation: 1,
+          scrollbarTheme: ScrollbarThemeData(
+            radius: const Radius.circular(45),
+            thickness: WidgetStateProperty.all(6),
+            thumbColor: WidgetStateProperty.all(Colors.black),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          // This ensures the item background matches the menu background
+          overlayColor: WidgetStatePropertyAll(Color(0xffE0E0E0)),
         ),
       ),
     );

@@ -1,34 +1,43 @@
 class SignUpRequest {
-  final bool isCompany;
   final String name;
   final String email;
   final String password;
-
-  // Company only
+  final String passwordConfirm;
+  final String accountType; // 'user' or 'employer'
   final String? companyName;
   final String? website;
-  final String? representative;
 
   SignUpRequest({
-    required this.isCompany,
     required this.name,
     required this.email,
     required this.password,
+    required this.passwordConfirm,
+    required this.accountType,
     this.companyName,
     this.website,
-    this.representative,
   });
 
-  Map<String, dynamic> toJson() {
+  // For Professional Signup
+  Map<String, dynamic> toUserJson() {
     return {
-      "type": isCompany ? "company" : "professional",
       "name": name,
       "email": email,
       "password": password,
-      if (isCompany) ...{
-        "company_name": companyName,
-        "website": website,
-        "representative": representative,
+      "passwordConfirm": passwordConfirm,
+      "accountType": "user", // MUST BE PRESENT
+    };
+  }
+
+  // For Company Signup
+  Map<String, dynamic> toCompanyJson() {
+    return {
+      "company": {"name": companyName, "domain": website},
+      "representative": {
+        "full_name": name,
+        "email": email,
+        "password": password,
+        "passwordConfirm": passwordConfirm,
+        "accountType": "employer", // MUST BE PRESENT
       },
     };
   }

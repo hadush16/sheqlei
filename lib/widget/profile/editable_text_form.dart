@@ -8,6 +8,7 @@ class CustomProfileField extends StatefulWidget {
   final int maxLines;
   final String? initialValue;
   final Function(String)? onChanged;
+  final TextEditingController? controller; // Add this
 
   const CustomProfileField({
     super.key,
@@ -17,6 +18,7 @@ class CustomProfileField extends StatefulWidget {
     this.maxLength,
     this.maxLines = 1,
     this.initialValue,
+    this.controller,
     this.onChanged,
   });
 
@@ -41,42 +43,6 @@ class _CustomProfileFieldState extends State<CustomProfileField> {
   }
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 10),
-  //     child: TextFormField(
-  //       controller: _controller,
-  //       maxLength: widget.maxLength,
-  //       maxLines: widget.maxLines,
-  //       onChanged: widget.onChanged,
-  //       style: const TextStyle(fontSize: 15),
-  //       decoration: InputDecoration(
-  //         labelText: widget.isRequired ? "${widget.label} *" : widget.label,
-  //         alignLabelWithHint: true,
-  //         labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-  //         floatingLabelStyle: const TextStyle(
-  //           color: Color(0xff8967B3),
-  //           fontSize: 16,
-  //         ),
-  //         hintText: widget.hint,
-  //         floatingLabelBehavior:
-  //             FloatingLabelBehavior.always, // Label inside border
-  //         contentPadding: const EdgeInsets.symmetric(
-  //           horizontal: 16,
-  //           vertical: 15,
-  //         ),
-  //         border: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(12),
-  //           borderSide: const BorderSide(color: Colors.grey),
-  //         ),
-  //         focusedBorder: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(12),
-  //           borderSide: const BorderSide(color: Color(0xff8967B3), width: 2),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -89,25 +55,34 @@ class _CustomProfileFieldState extends State<CustomProfileField> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              // Changes color dynamically based on focus
-              color: _isFocused
-                  ? const Color(0xff8967B3)
-                  : Colors.grey.shade300,
-              width: _isFocused ? 2 : 1,
-            ),
+            border: Border.all(color: Color(0xffD0D0D0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               // 1. The Label: Fixed inside at the top
-              Text(
-                widget.isRequired ? "${widget.label} *" : widget.label,
-                style: TextStyle(
-                  color: _isFocused ? const Color(0xff8967B3) : Colors.grey,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
+              // Instead of a simple Text(widget.label), use Text.rich
+              Text.rich(
+                TextSpan(
+                  text: widget.label, // The main label text
+                  style: const TextStyle(
+                    color: Color(0xffA0A0A0), // Your default grey
+                    fontSize: 18,
+                    fontFamily: 'pretendard',
+                    fontWeight: FontWeight.w500,
+                  ),
+                  children: [
+                    if (widget.isRequired)
+                      const TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red, // Specifically makes the star red
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                  ],
                 ),
               ),
               const SizedBox(height: 2), // Small gap between label and input
@@ -117,7 +92,12 @@ class _CustomProfileFieldState extends State<CustomProfileField> {
                 maxLength: widget.maxLength,
                 maxLines: widget.maxLines,
                 onChanged: widget.onChanged,
-                style: const TextStyle(fontSize: 15, color: Colors.black),
+                style: const TextStyle(
+                  fontSize: 21,
+                  color: Colors.black,
+                  fontFamily: 'pretendard',
+                  fontWeight: FontWeight.w500,
+                ),
                 decoration: InputDecoration(
                   hintText: widget.hint,
                   hintStyle: TextStyle(

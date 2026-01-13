@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sheqlee/models/filter_model.dart';
-import 'package:sheqlee/providers/filter_provider.dart';
+import 'package:sheqlee/models/tag_model.dart';
+import 'package:sheqlee/providers/filter/filter_provider.dart';
 
 class TagSearchGroup extends ConsumerWidget {
   final List<Tag> tags;
@@ -11,13 +11,14 @@ class TagSearchGroup extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch the active tag ID to highlight the current search
-    final activeTagId = ref.watch(filterSearchProvider).activeTagId;
+    //final activeTagId = ref.watch(filterSearchProvider).activeTagId;
+    final filterAsync = ref.watch(filterDataProvider);
 
     return Wrap(
       spacing: 8,
       runSpacing: 10,
       children: tags.map((tag) {
-        final isSelected = activeTagId == tag.id;
+        final isSelected = filterAsync == tag.id;
 
         return GestureDetector(
           onTap: () {

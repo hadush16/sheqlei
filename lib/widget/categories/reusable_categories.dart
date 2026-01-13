@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/models/category_model.dart';
-import 'package:sheqlee/providers/filter_provider.dart';
+import 'package:sheqlee/providers/filter/filter_provider.dart';
 
 class CategorySearchGroup extends ConsumerWidget {
   final List<Category> categories;

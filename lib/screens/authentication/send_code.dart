@@ -68,74 +68,82 @@ class _PasswordResetState extends ConsumerState<PasswordReset> {
           elevation: 0,
           backgroundColor: Colors.white,
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 25, right: 25, top: 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // 2. THE REUSABLE BACK BUTTON (Fixed Position)
-                Positioned(top: 89, left: 25.02, child: const AppBackButton()),
+        body: Stack(
+          children: [
+            const SizedBox(height: 15),
+            Positioned(top: 50, left: 25.02, child: const AppBackButton()),
 
-                const SizedBox(height: 15),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25, right: 25, top: 80),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // 2. THE REUSABLE BACK BUTTON (Fixed Position)
+                    const SizedBox(height: 15),
 
-                const Text(
-                  "Reset password",
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'pretendard',
-                    fontWeight: FontWeight.bold,
-                  ),
+                    const Text(
+                      "Reset password",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontFamily: 'pretendard',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "You’ll receive a password reset code on your email.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+
+                    const SizedBox(height: 75),
+
+                    Form(
+                      key: _formKey,
+                      child: AppTextField(
+                        controller: _emailController,
+                        focusNode: _emailFocus,
+                        hintText: "E-mail",
+                        autofocus: false,
+
+                        keyboardType: TextInputType.emailAddress,
+                        hasError: _generalError != null,
+                        onChanged: (v) {
+                          if (_generalError != null) {
+                            setState(() => _generalError = null);
+                          }
+                          notifier.setEmail(v);
+                        },
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        // top: 340,
+                        //left: 10,
+                        //right: 10,
+                        bottom: 50,
+                      ),
+                      child: AppPrimaryButton(
+                        text: 'Send code',
+                        // Logic: Purple only if both
+                        enabled: isFormValid,
+                        // Button turns purple when valid  Shows spinner when true
+                        loading: state.loading,
+                        onPressed: () {
+                          _dosending();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 15),
-                const Text(
-                  "You’ll receive a password reset code on your email.",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-                ),
-
-                const SizedBox(height: 75),
-
-                Form(
-                  key: _formKey,
-                  child: AppTextField(
-                    controller: _emailController,
-                    focusNode: _emailFocus,
-                    hintText: "E-mail",
-                    autofocus: false,
-
-                    keyboardType: TextInputType.emailAddress,
-                    hasError: _generalError != null,
-                    onChanged: (v) {
-                      if (_generalError != null) {
-                        setState(() => _generalError = null);
-                      }
-                      notifier.setEmail(v);
-                    },
-                  ),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    // top: 340,
-                    //left: 10,
-                    //right: 10,
-                    bottom: 50,
-                  ),
-                  child: AppPrimaryButton(
-                    text: 'Send code',
-                    // Logic: Purple only if both
-                    enabled: isFormValid,
-                    // Button turns purple when valid  Shows spinner when true
-                    loading: state.loading,
-                    onPressed: () {
-                      _dosending();
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -229,9 +237,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       onChanged: notifier.setPassword,
                       validator: (value) =>
                           AppValidators.validatePassword(_newPassCtrl.text),
-                      hasError:
-                          state.confirmPassword.isNotEmpty &&
-                          !state.passwordsMatch,
+
+                      hasError: state.currentError != null,
                     ),
 
                     const SizedBox(height: 36),
@@ -252,9 +259,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                 .text, // Pass the text from the first field
                             value,
                           ),
-                      hasError:
-                          state.confirmPassword.isNotEmpty &&
-                          !state.passwordsMatch,
+                      hasError: state.currentError != null,
                     ),
                     const SizedBox(height: 26),
 
@@ -314,7 +319,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               child: AppPrimaryButton(
                 text: "Change Password",
                 loading: state.isLoading,
-                enabled: state.canSubmit,
+                enabled: state.isFormFull,
                 onPressed: () async {
                   final success = await notifier.submitReset();
                   if (success && context.mounted) {

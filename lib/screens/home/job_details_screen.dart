@@ -384,10 +384,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sheqlee/providers/jobs/tags_notifier.dart';
+//import 'package:sheqlee/providers/jobs/tags_notifier.dart';
 import 'package:sheqlee/widget/login/backbutton.dart';
 import 'package:sheqlee/widget/home/favotite_icon.dart';
 import 'package:sheqlee/widget/home/job_metadata_section.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../models/job.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
@@ -532,7 +533,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                   ),
                 ),
                 Text(
-                  widget.job.time,
+                  timeago.format(widget.job.createdAt),
                   style: const TextStyle(
                     color: Color(0xff909090),
                     fontSize: 10,
@@ -540,7 +541,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  widget.job.company,
+                  widget.job.companyName,
                   style: const TextStyle(
                     color: Color(0xffa06cd5),
                     fontWeight: FontWeight.w500,
@@ -548,23 +549,23 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                 ),
                 const SizedBox(height: 23),
                 _buildSection("", widget.job.shortDescription),
-                _buildSection(
-                  "Qualifications",
-                  widget.job.details?.qualifications ?? "",
-                ),
-                _buildSection(
-                  "Experience",
-                  widget.job.details?.experience ?? "",
-                ),
-                _buildSection(
-                  "Skills & Knowledge",
-                  widget.job.details?.skills ?? [],
-                ),
+                // _buildSection(
+                //   "Qualifications",
+                //   widget.job.description, //details?.qualifications ?? "",
+                // ),
+                // _buildSection(
+                //   "Experience",
+                //   widget.job.details?.experience ?? "",
+                // ),
+                // _buildSection(
+                //   "Skills & Knowledge",
+                //   widget.job.details?.skills ?? [],
+                // ),
                 _buildSection(
                   "Description",
-                  widget.job.details?.description ?? "",
+                  widget.job.description, //details?.description ?? "",
                 ),
-                _buildTagsSection(ref),
+                _buildTagsSection(),
                 const SizedBox(height: 30),
                 Row(
                   children: [
@@ -686,25 +687,6 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
     );
   }
 
-  Widget _buildTagsSection(WidgetRef ref) {
-    final tagsAsync = ref.watch(tagsProvider);
-    return tagsAsync.when(
-      data: (tags) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: Wrap(
-          spacing: 2.3,
-          runSpacing: 5,
-          children: [
-            _buildIconTag(),
-            ...tags.map((tag) => _buildTextTag(tag.name)),
-          ],
-        ),
-      ),
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
-  }
-
   Widget _buildIconTag() {
     return Container(
       padding: const EdgeInsets.all(3),
@@ -712,21 +694,66 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
         color: Colors.black,
         shape: BoxShape.circle,
       ),
-      child: SvgPicture.asset('assets/icons/tag (1).svg', width: 19),
+      child: SvgPicture.asset(
+        'assets/icons/tag (1).svg',
+        width: 19,
+        // If the SVG is missing, use an Icon as a fallback:
+        // child: const Icon(Icons.tag, color: Colors.white, size: 14),
+      ),
     );
   }
 
   Widget _buildTextTag(String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xff000000)),
+        border: Border.all(color: const Color(0xff000000), width: 0.5),
       ),
       child: Text(
         label,
-        style: const TextStyle(fontSize: 12, color: Color(0xff303030)),
+        style: const TextStyle(
+          fontSize: 12,
+          color: Color(0xff303030),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTagsSection() {
+    // Access the job via widget.job
+    final tags = widget.job.tagIds;
+
+    // if (tags.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          _buildIconTag(),
+
+          // Only show text chips if there are tags
+          if (tags.isNotEmpty)
+            ...tags.map(
+              (tag) => _buildTextTag(
+                tag.name,
+              ), // 👈 Access .name and use your styled method
+            )
+          else
+            const Text(
+              "No tags specified",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+        ],
       ),
     );
   }

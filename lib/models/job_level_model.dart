@@ -1,9 +1,7 @@
 class JobLevel {
   final String id;
-  final String name; // e.g., "Junior", "Intermediate", "Expert"
+  final String name;
+  final int levelValue; // Internal number for sorting/logic
 
-  JobLevel({required this.id, required this.name});
-
-  factory JobLevel.fromJson(Map<String, dynamic> json) =>
-      JobLevel(id: json["_id"] ?? "", name: json["name"] ?? "");
+  JobLevel({required this.id, required this.name, required this.levelValue});
 }

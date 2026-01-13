@@ -5,6 +5,7 @@ class AppPrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool enabled;
   final bool loading;
+  final Color? backgroundColor;
 
   const AppPrimaryButton({
     super.key,
@@ -12,11 +13,12 @@ class AppPrimaryButton extends StatelessWidget {
     required this.onPressed,
     required this.enabled,
     this.loading = false,
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Color activeColor = const Color(0xff8967B3);
+    final Color activeColor = backgroundColor ?? const Color(0xff8967B3);
     final Color inactiveColor = const Color(0xff000000);
 
     return SizedBox(

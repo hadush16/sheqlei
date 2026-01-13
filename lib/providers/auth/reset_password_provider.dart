@@ -7,6 +7,7 @@ class ResetPasswordState {
   final bool isLoading;
   final bool obscure;
   final String? backendError; // New field to capture API errors
+  final bool hasAttemptedSubmit; // NEW FIELD
 
   ResetPasswordState({
     this.code = '',
@@ -15,10 +16,14 @@ class ResetPasswordState {
     this.isLoading = false,
     this.obscure = true,
     this.backendError,
+    this.hasAttemptedSubmit = false, // Default to false
   });
-
+  bool get isFormFull =>
+      isCodeValid && password.length >= 6 && confirmPassword.isNotEmpty;
   // FIXED LOGIC: Returning clear strings so AuthErrorIndicator can display them
   String? get currentError {
+    // if (backendError != null) return backendError;
+    if (!hasAttemptedSubmit && backendError == null) return null;
     if (backendError != null) return backendError;
     // if (code.isNotEmpty && code.length < 6) return "Code must be 6 digits";
     // if (password.isNotEmpty && password.length < 6) return "";
@@ -40,6 +45,7 @@ class ResetPasswordState {
     bool? isLoading,
     bool? obscure,
     String? backendError, // Added to copyWith
+    bool? hasAttemptedSubmit, // Added to copyWith
   }) {
     return ResetPasswordState(
       code: code ?? this.code,
@@ -49,6 +55,7 @@ class ResetPasswordState {
       obscure: obscure ?? this.obscure,
       // We allow passing null to clear the backend error
       backendError: backendError,
+      hasAttemptedSubmit: hasAttemptedSubmit ?? this.hasAttemptedSubmit,
     );
   }
 }
@@ -69,10 +76,12 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
 
   Future<bool> submitReset() async {
     // Prevent multiple clicks
-    if (state.isLoading) return false;
+
+    // if (state.isLoading) return false;
+    state = state.copyWith(hasAttemptedSubmit: true);
+    if (!state.canSubmit) return false;
 
     state = state.copyWith(isLoading: true, backendError: null);
-
     try {
       // Replace this with your actual MongoDB / Backend call
       // Example: await authService.reset(state.code, state.password);

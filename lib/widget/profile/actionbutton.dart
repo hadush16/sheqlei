@@ -19,8 +19,8 @@ class ProfileActionButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: color),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        minimumSize: const Size(100, 40),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        minimumSize: const Size(70, 30),
       ),
       child: Text(
         label,

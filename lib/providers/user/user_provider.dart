@@ -1,7 +1,7 @@
 // lib/providers/user_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sheqlee/models/user_model.dart';
-// import 'package:http/http.dart' as http; // Uncomment when you have your API URL
+import 'dart:convert';
 
 class UserNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   UserNotifier() : super(const AsyncValue.data(null));
@@ -25,8 +25,9 @@ class UserNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       // Mock Data for now:
       final user = UserModel(
         id: userId,
-        username: "User_Name",
-        email: "user@example.com",
+        name: "Muruts Yifter",
+        email: "muruts.yifter@gmail.com",
+        accountType: 'professional',
       );
 
       state = AsyncValue.data(user);
@@ -36,6 +37,7 @@ class UserNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   }
 
   // Clear user on Logout
+
   void logout() {
     state = const AsyncValue.data(null);
   }
