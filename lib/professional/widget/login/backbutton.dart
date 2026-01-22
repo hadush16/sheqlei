@@ -1,0 +1,74 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+
+// class AppBackButton extends StatelessWidget {
+//   final VoidCallback? onTap;
+
+//   const AppBackButton({super.key, this.onTap});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return IconButton(
+//       // This removes the 16px default padding of IconButton
+//       // to allow the -18 offset alignment
+//       padding: EdgeInsets.zero,
+//       constraints: const BoxConstraints(),
+//       onPressed:
+//           onTap ??
+//           () {
+//             FocusScope.of(context).unfocus();
+//             Navigator.pop(context);
+//           },
+//       icon: Transform.translate(
+//         offset: const Offset(-18, 0),
+//         child: SvgPicture.asset(
+//           'assets/icons/arrow-down-sign-to-navigate.svg',
+//           width: 11,
+//           height: 20,
+//         ),
+//       ),
+//     );
+//   }
+// }
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sheqlee/professional/widget/login/login.dart';
+
+class AppBackButton extends StatelessWidget {
+  final VoidCallback? onTap;
+
+  const AppBackButton({super.key, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      onPressed:
+          onTap ??
+          () {
+            FocusScope.of(context).unfocus();
+
+            if (Navigator.canPop(context)) {
+              // If there is a history, go back normally
+              Navigator.pop(context);
+            } else {
+              // If NO history (the error you saw), go to a safe default
+              // Replace 'HomeScreen()' with the actual class name of your home/landing page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => IntroLoginScreen()),
+              );
+            }
+          },
+      icon: Transform.translate(
+        offset: const Offset(-18, 0),
+        child: SvgPicture.asset(
+          'assets/icons/arrow-down-sign-to-navigate.svg',
+          width: 11,
+          height: 20,
+        ),
+      ),
+    );
+  }
+}

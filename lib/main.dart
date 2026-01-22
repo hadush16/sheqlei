@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:sheqlee/screens/authentication/splash_screen.dart';
+import 'package:sheqlee/professional/authentication/splash_screen.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
